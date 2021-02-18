@@ -1,0 +1,26 @@
+//
+// OutlookTabCtrl.RC2 - resources Microsoft Visual C++ does not edit directly
+//
+
+#ifdef APSTUDIO_INVOKED
+#error this file is not editable by Microsoft Visual C++
+#endif //APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Png
+//
+
+IDB_STRIPE_NORMAL			PNG						"res/StripeNormal.png"
+IDB_STRIPE_DISABLE		PNG						"res/StripeDisable.png"
+IDB_BUTTON_NORMAL			PNG						"res/ButtonNormal.png"
+IDB_BUTTON_DISABLE		PNG						"res/ButtonDisable.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Cursor
+//
+
+IDC_CURSOR1					CURSOR					"res/SplitterHorz.cur"
+
+/////////////////////////////////////////////////////////////////////////////
