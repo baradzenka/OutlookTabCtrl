@@ -141,7 +141,7 @@ public:
 	HANDLE HitTestEx(CPoint point) const;
 	HANDLE GetItemByWindowID(int id) const;
 	void SetFocusToChild();
-	void MoveChangedWindow(HWND wnd, RECT const *rc, bool redraw);
+	void MoveChangedWindow(HWND wnd, CRect const *rc, bool redraw);
 	bool LoadStateInner(CArchive *ar);
 	bool SaveStateInner(CArchive *ar) const;
 };
@@ -1207,12 +1207,12 @@ void OutlookTabCtrl::Private::SetFocusToChild()
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrl::Private::MoveChangedWindow(HWND wnd, RECT const *rc, bool redraw)
-{	CRect rcNow;
-	::GetWindowRect(wnd,&rcNow/*out*/);
-	::MapWindowPoints(HWND_DESKTOP,::GetParent(wnd),reinterpret_cast<POINT*>(&rcNow),2);
-	if(rcNow!=*rc)
-		::MoveWindow(wnd,rc->left,rc->top,rc->right-rc->left,rc->bottom-rc->top,redraw);
+void OutlookTabCtrl::Private::MoveChangedWindow(HWND wnd, CRect const *rcNew, bool redraw)
+{	CRect rcOld;
+	::GetWindowRect(wnd,&rcOld/*out*/);
+	::MapWindowPoints(HWND_DESKTOP,o.m_hWnd,reinterpret_cast<POINT*>(&rcOld),2);
+	if(*rcNew!=rcOld)
+		::MoveWindow(wnd,rcNew->left,rcNew->top,rcNew->Width(),rcNew->Height(),redraw);
 }
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
