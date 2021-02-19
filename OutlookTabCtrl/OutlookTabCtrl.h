@@ -107,10 +107,10 @@ public:
 	void SetButtonsAlign(ButtonsAlign align);
 	ButtonsAlign GetButtonsAlign() const;
 		// 
-	bool CreateStripeImageList(HINSTANCE hinstRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
+	bool CreateStripeImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
 	void GetStripeImages(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const;
 	bool GetStripeImageLists(COLORREF clrBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const;
-	bool CreateButtonImageList(HINSTANCE hinstRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
+	bool CreateButtonImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
 	void GetButtonImages(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const;
 	bool GetButtonImageLists(COLORREF clrBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const;
 	void GetImageSizes(CSize *szStripe/*out,or null*/, CSize *szButton/*out,or null*/) const;

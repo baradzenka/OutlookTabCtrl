@@ -133,7 +133,7 @@ public:
 	Item *HandleToItem(HANDLE h);
 	Item const *HandleToItem(HANDLE h) const;
 	HANDLE InsertItem(i_item before, HWND Wnd, TCHAR const *text, int imageStripe, int imageButton);
-	bool LoadImage(HINSTANCE hinstRes/*or null*/, UINT resID, bool pngImage, Gdiplus::Bitmap **bmp/*out*/) const;
+	bool LoadImage(HMODULE moduleRes/*or null*/, UINT resID, bool pngImage, Gdiplus::Bitmap **bmp/*out*/) const;
 	bool CreateImageList(Gdiplus::Bitmap *bmp, int imageWidth, COLORREF clrMask/*or CLR_NONE*/, COLORREF clrBack/*or CLR_NONE*/, CImageList *imageList/*out*/) const;
 	void PrepareRecalc();
 	void Recalc();   // recalculate control.
@@ -413,7 +413,7 @@ OutlookTabCtrl::ButtonsAlign OutlookTabCtrl::GetButtonsAlign() const
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-bool OutlookTabCtrl::CreateStripeImageList(HINSTANCE hinstRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
+bool OutlookTabCtrl::CreateStripeImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
 	bool pngImage, int imageWidth, COLORREF clrTransp/*=CLR_NONE*/)
 {
 	if(p.m_pBitmapStripeNorm)
@@ -427,10 +427,10 @@ bool OutlookTabCtrl::CreateStripeImageList(HINSTANCE hinstRes/*or null*/, UINT r
 		// 
 	bool res = true;
 	if(resNormalID)
-		if( !p.LoadImage(hinstRes,resNormalID,pngImage,&p.m_pBitmapStripeNorm/*out*/) )
+		if( !p.LoadImage(moduleRes,resNormalID,pngImage,&p.m_pBitmapStripeNorm/*out*/) )
 			res = false;
 	if(resDisableID)
-		if( !p.LoadImage(hinstRes,resDisableID,pngImage,&p.m_pBitmapStripeDis/*out*/) )
+		if( !p.LoadImage(moduleRes,resDisableID,pngImage,&p.m_pBitmapStripeDis/*out*/) )
 			res = false;
 		// 
 	if(p.m_pBitmapStripeNorm)
@@ -462,7 +462,7 @@ bool OutlookTabCtrl::GetStripeImageLists(COLORREF clrBack/*or CLR_NONE*/, CImage
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-bool OutlookTabCtrl::CreateButtonImageList(HINSTANCE hinstRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
+bool OutlookTabCtrl::CreateButtonImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
 	bool pngImage, int imageWidth, COLORREF clrTransp/*=CLR_NONE*/)
 {
 	if(p.m_pBitmapButtonNorm)
@@ -476,10 +476,10 @@ bool OutlookTabCtrl::CreateButtonImageList(HINSTANCE hinstRes/*or null*/, UINT r
 		// 
 	bool res = true;
 	if(resNormalID)
-		if( !p.LoadImage(hinstRes,resNormalID,pngImage,&p.m_pBitmapButtonNorm/*out*/) )
+		if( !p.LoadImage(moduleRes,resNormalID,pngImage,&p.m_pBitmapButtonNorm/*out*/) )
 			res = false;
 	if(resDisableID)
-		if( !p.LoadImage(hinstRes,resDisableID,pngImage,&p.m_pBitmapButtonDis/*out*/) )
+		if( !p.LoadImage(moduleRes,resDisableID,pngImage,&p.m_pBitmapButtonDis/*out*/) )
 			res = false;
 		// 
 	if(p.m_pBitmapButtonNorm)
@@ -1707,25 +1707,25 @@ void OutlookTabCtrl::Private::Item::operator>>(CArchive &ar)	// load.
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-bool OutlookTabCtrl::Private::LoadImage(HINSTANCE hinstRes/*or null*/, UINT resID, bool pngImage, Gdiplus::Bitmap **bmp/*out*/) const
+bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID, bool pngImage, Gdiplus::Bitmap **bmp/*out*/) const
 {	assert(resID);
 	assert(bmp);
 		// 
 	*bmp = NULL;
 		// 
-	if(!hinstRes)
-		hinstRes = AfxFindResourceHandle(resName,(pngImage ? _T("PNG") : RT_BITMAP));
-	if(hinstRes)
+	if(!moduleRes)
+		moduleRes = AfxFindResourceHandle(resName,(pngImage ? _T("PNG") : RT_BITMAP));
+	if(moduleRes)
 	{	if(!pngImage)   // bmp.
-			*bmp = ::new (std::nothrow) Gdiplus::Bitmap(hinstRes,MAKEINTRESOURCEW(resID));
+			*bmp = ::new (std::nothrow) Gdiplus::Bitmap(moduleRes,MAKEINTRESOURCEW(resID));
 		else   // png.
-		{	HRSRC hRsrc = ::FindResource(hinstRes,MAKEINTRESOURCE(resID),_T("PNG"));
+		{	HRSRC hRsrc = ::FindResource(moduleRes,MAKEINTRESOURCE(resID),_T("PNG"));
 			if(hRsrc)
-			{	HGLOBAL hGlobal = ::LoadResource(hinstRes,hRsrc);
+			{	HGLOBAL hGlobal = ::LoadResource(moduleRes,hRsrc);
 				if(hGlobal)
 				{	const void *lpBuffer = ::LockResource(hGlobal);
 					if(lpBuffer)
-					{	const UINT uiSize = static_cast<UINT>( ::SizeofResource(hinstRes,hRsrc) );
+					{	const UINT uiSize = static_cast<UINT>( ::SizeofResource(moduleRes,hRsrc) );
 						HGLOBAL hRes = ::GlobalAlloc(GMEM_MOVEABLE, uiSize);
 						if(hRes)
 						{	void *lpResBuffer = ::GlobalLock(hRes);
