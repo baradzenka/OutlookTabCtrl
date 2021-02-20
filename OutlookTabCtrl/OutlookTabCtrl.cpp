@@ -451,12 +451,12 @@ void OutlookTabCtrl::GetStripeImages(Gdiplus::Bitmap **norm/*out,or null*/, Gdip
 		*disable = p.m_pBitmapStripeDis;
 } 
 //
-bool OutlookTabCtrl::GetStripeImageLists(COLORREF clrBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
+bool OutlookTabCtrl::GetStripeImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
 {	if(normal)
-		if(!p.m_pBitmapStripeNorm || !p.CreateImageList(p.m_pBitmapStripeNorm, p.m_szImageStripe.cx, p.m_clrImageStripeTransp, clrBack, normal/*out*/) )
+		if(!p.m_pBitmapStripeNorm || !p.CreateImageList(p.m_pBitmapStripeNorm, p.m_szImageStripe.cx, p.m_clrImageStripeTransp, clrDstBack, normal/*out*/) )
 			return false;
 	if(disable)
-		if(!p.m_pBitmapStripeDis || !p.CreateImageList(p.m_pBitmapStripeDis, p.m_szImageStripe.cx, p.m_clrImageStripeTransp, clrBack, disable/*out*/) )
+		if(!p.m_pBitmapStripeDis || !p.CreateImageList(p.m_pBitmapStripeDis, p.m_szImageStripe.cx, p.m_clrImageStripeTransp, clrDstBack, disable/*out*/) )
 			return false;
 	return true;
 }
@@ -500,12 +500,12 @@ void OutlookTabCtrl::GetButtonImages(Gdiplus::Bitmap **normal/*out,or null*/, Gd
 		*disable = p.m_pBitmapButtonDis;
 }
 //
-bool OutlookTabCtrl::GetButtonImageLists(COLORREF clrBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
+bool OutlookTabCtrl::GetButtonImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
 {	if(normal)
-		if(!p.m_pBitmapButtonNorm || !p.CreateImageList(p.m_pBitmapButtonNorm, p.m_szImageButton.cx, p.m_clrImageButtonTransp, clrBack, normal/*out*/) )
+		if(!p.m_pBitmapButtonNorm || !p.CreateImageList(p.m_pBitmapButtonNorm, p.m_szImageButton.cx, p.m_clrImageButtonTransp, clrDstBack, normal/*out*/) )
 			return false;
 	if(disable)
-		if(!p.m_pBitmapButtonDis || !p.CreateImageList(p.m_pBitmapButtonDis, p.m_szImageButton.cx, p.m_clrImageButtonTransp, clrBack, disable/*out*/) )
+		if(!p.m_pBitmapButtonDis || !p.CreateImageList(p.m_pBitmapButtonDis, p.m_szImageButton.cx, p.m_clrImageButtonTransp, clrDstBack, disable/*out*/) )
 			return false;
 	return true;
 }
