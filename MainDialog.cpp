@@ -52,8 +52,8 @@ int Dialog::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_OutlookTabCtrl.SetAbilityManager(this);
 	m_OutlookTabCtrl.SetNotifyManager(this);
 		// 
-	m_OutlookTabCtrl.CreateStripeImageList(NULL,IDB_STRIPE_NORMAL,IDB_STRIPE_DISABLE,true,24);
-	m_OutlookTabCtrl.CreateButtonImageList(NULL,IDB_BUTTON_NORMAL,IDB_BUTTON_DISABLE,true,16);
+	m_OutlookTabCtrl.CreateStripeImage(NULL,IDB_STRIPE_NORMAL,IDB_STRIPE_DISABLE,true,24);
+	m_OutlookTabCtrl.CreateButtonImage(NULL,IDB_BUTTON_NORMAL,IDB_BUTTON_DISABLE,true,16);
 		// 
 	m_OutlookTabCtrl.SetCaptionFont( GetTahomaBoldFont() );
 	m_OutlookTabCtrl.SetStripesFont( GetTahomaBoldFont() );

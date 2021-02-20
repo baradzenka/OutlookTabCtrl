@@ -413,7 +413,7 @@ OutlookTabCtrl::ButtonsAlign OutlookTabCtrl::GetButtonsAlign() const
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-bool OutlookTabCtrl::CreateStripeImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
+bool OutlookTabCtrl::CreateStripeImage(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
 	bool pngImage, int imageWidth, COLORREF clrTransp/*=CLR_NONE*/)
 {
 	if(p.m_pBitmapStripeNorm)
@@ -444,14 +444,14 @@ bool OutlookTabCtrl::CreateStripeImageList(HMODULE moduleRes/*or null*/, UINT re
 	return res;
 }
 // 
-void OutlookTabCtrl::GetStripeImages(Gdiplus::Bitmap **norm/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const
+void OutlookTabCtrl::GetStripeImage(Gdiplus::Bitmap **norm/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const
 {	if(norm)
 		*norm = p.m_pBitmapStripeNorm;
 	if(disable)
 		*disable = p.m_pBitmapStripeDis;
 } 
 //
-bool OutlookTabCtrl::GetStripeImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
+bool OutlookTabCtrl::GetStripeImageList(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
 {	if(normal)
 		if(!p.m_pBitmapStripeNorm || !p.CreateImageList(p.m_pBitmapStripeNorm, p.m_szImageStripe.cx, p.m_clrImageStripeTransp, clrDstBack, normal/*out*/) )
 			return false;
@@ -462,7 +462,7 @@ bool OutlookTabCtrl::GetStripeImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CIm
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-bool OutlookTabCtrl::CreateButtonImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
+bool OutlookTabCtrl::CreateButtonImage(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, 
 	bool pngImage, int imageWidth, COLORREF clrTransp/*=CLR_NONE*/)
 {
 	if(p.m_pBitmapButtonNorm)
@@ -493,14 +493,14 @@ bool OutlookTabCtrl::CreateButtonImageList(HMODULE moduleRes/*or null*/, UINT re
 	return res;
 }
 // 
-void OutlookTabCtrl::GetButtonImages(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const
+void OutlookTabCtrl::GetButtonImage(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const
 {	if(normal)
 		*normal = p.m_pBitmapButtonNorm;
 	if(disable)
 		*disable = p.m_pBitmapButtonDis;
 }
 //
-bool OutlookTabCtrl::GetButtonImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
+bool OutlookTabCtrl::GetButtonImageList(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const
 {	if(normal)
 		if(!p.m_pBitmapButtonNorm || !p.CreateImageList(p.m_pBitmapButtonNorm, p.m_szImageButton.cx, p.m_clrImageButtonTransp, clrDstBack, normal/*out*/) )
 			return false;
@@ -511,7 +511,7 @@ bool OutlookTabCtrl::GetButtonImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CIm
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrl::GetImageSizes(CSize *szStripe/*out,or null*/, CSize *szButton/*out,or null*/) const
+void OutlookTabCtrl::GetImageSize(CSize *szStripe/*out,or null*/, CSize *szButton/*out,or null*/) const
 {	if(szStripe)
 	{	szStripe->cx = p.m_szImageStripe.cx;
 		szStripe->cy = p.m_szImageStripe.cy;
@@ -1859,7 +1859,7 @@ bool OutlookTabCtrlCustomBase::HasButtonTooltip(OutlookTabCtrl const *ctrl, HAND
 	}
 		// 
 	Gdiplus::Bitmap *pBmpNorm, *pBmpDis;
-	ctrl->GetButtonImages(&pBmpNorm/*out*/,&pBmpDis/*out*/);
+	ctrl->GetButtonImage(&pBmpNorm/*out*/,&pBmpDis/*out*/);
 	int imageButton;
 	ctrl->GetItemImage(item,NULL,&imageButton/*out*/);
 	const bool drawIcon = (imageButton!=-1 && 
@@ -1867,7 +1867,7 @@ bool OutlookTabCtrlCustomBase::HasButtonTooltip(OutlookTabCtrl const *ctrl, HAND
 			(ctrl->IsItemDisabled(item) && pBmpDis)));
 	if(drawIcon)
 	{	CSize szImage;
-		ctrl->GetImageSizes(NULL,&szImage);
+		ctrl->GetImageSize(NULL,&szImage);
 		rc.left += GetButtonContentLeftMargin() + szImage.cx + GetButtonImageTextGap();
 	}
 	else
@@ -1965,7 +1965,7 @@ void OutlookTabCtrlCustomBase::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, H
 		// 
 		// draw icon.
 	Gdiplus::Bitmap *pBmpNorm, *pBmpDis;
-	ctrl->GetStripeImages(&pBmpNorm/*out*/,&pBmpDis/*out*/);
+	ctrl->GetStripeImage(&pBmpNorm/*out*/,&pBmpDis/*out*/);
 	int imageStripe;
 	ctrl->GetItemImage(item,&imageStripe/*out*/,NULL);
 	const bool bDisabled = ctrl->IsItemDisabled(item);
@@ -1975,7 +1975,7 @@ void OutlookTabCtrlCustomBase::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, H
 		((!bDisabled && pBmpNorm) || (bDisabled && pBmpDis)))
 	{
 		CSize szImage;
-		ctrl->GetImageSizes(&szImage/*out*/,NULL);
+		ctrl->GetImageSize(&szImage/*out*/,NULL);
 		COLORREF clrTransp;
 		ctrl->GetImageTranspColor(&clrTransp/*out*/,NULL);
 			// 		
@@ -2017,7 +2017,7 @@ void OutlookTabCtrlCustomBase::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, H
 	DrawBackground(ctrl,dc,&state,&rc);
 		// 
 	Gdiplus::Bitmap *pBmpNorm, *pBmpDis;
-	ctrl->GetButtonImages(&pBmpNorm/*out*/,&pBmpDis/*out*/);
+	ctrl->GetButtonImage(&pBmpNorm/*out*/,&pBmpDis/*out*/);
 	int imageButton;
 	ctrl->GetItemImage(item,NULL,&imageButton/*out*/);
 		// 
@@ -2029,7 +2029,7 @@ void OutlookTabCtrlCustomBase::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, H
 		rc.left += GetButtonContentLeftMargin();
 		if(drawIcon)
 		{	CSize szImage;
-			ctrl->GetImageSizes(NULL,&szImage/*out*/);
+			ctrl->GetImageSize(NULL,&szImage/*out*/);
 			COLORREF clrTransp;
 			ctrl->GetImageTranspColor(NULL,&clrTransp/*out*/);
 				// 
@@ -2048,7 +2048,7 @@ void OutlookTabCtrlCustomBase::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, H
 	else	// draw icon only.
 		if(drawIcon)
 		{	CSize szImage;
-			ctrl->GetImageSizes(NULL,&szImage/*out*/);
+			ctrl->GetImageSize(NULL,&szImage/*out*/);
 			COLORREF clrTransp;
 			ctrl->GetImageTranspColor(NULL,&clrTransp/*out*/);
 				// 

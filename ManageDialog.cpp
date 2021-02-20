@@ -23,12 +23,12 @@ BOOL ManageDialog::OnInitDialog()
 	m_ListCtrl.SubclassDlgItem(ID_MANAGE_DIALOG_LIST,this);
 		// 
 	CSize szTab, szButton;
-	m_pTabCtrl->GetImageSizes(&szTab/*out*/,&szButton/*out*/);
+	m_pTabCtrl->GetImageSize(&szTab/*out*/,&szButton/*out*/);
 	m_bTabImages = (szTab.cy <= szButton.cy);
 	CImageList normal, disable;
 	(m_bTabImages ?
-		m_pTabCtrl->GetStripeImageLists( ::GetSysColor(COLOR_WINDOW), &normal/*out*/,&disable/*out*/) :
-		m_pTabCtrl->GetButtonImageLists( ::GetSysColor(COLOR_WINDOW), &normal/*out*/,&disable/*out*/));
+		m_pTabCtrl->GetStripeImageList( ::GetSysColor(COLOR_WINDOW), &normal/*out*/,&disable/*out*/) :
+		m_pTabCtrl->GetButtonImageList( ::GetSysColor(COLOR_WINDOW), &normal/*out*/,&disable/*out*/));
 	m_ImageList.Create(normal.GetSafeHandle() ? &normal : &disable);
 		// 
 	CRect rc;

@@ -24,9 +24,9 @@ if( !m_TabCtrl.Create(this, WS_CHILD | WS_VISIBLE,CRect(10,10,100,200), ID_Outlo
     return -1;    // error.
 
 // Create an ImageList with icons for tabs displayed as stripes.
-m_TabCtrl.CreateStripeImageList(NULL,IDB_STRIPE_NORMAL,IDB_STRIPE_DISABLE,true,24);
+m_TabCtrl.CreateStripeImage(NULL,IDB_STRIPE_NORMAL,IDB_STRIPE_DISABLE,true,24);
 // Create an ImageList with icons for tabs displayed as buttons.
-m_TabCtrl.CreateButtonImageList(NULL,IDB_BUTTON_NORMAL,IDB_BUTTON_DISABLE,true,16);
+m_TabCtrl.CreateButtonImage(NULL,IDB_BUTTON_NORMAL,IDB_BUTTON_DISABLE,true,16);
 
 // Create child controls.
 if( !m_List1.Create(WS_CHILD | WS_CLIPCHILDREN | LVS_REPORT, CRect(0,0,0,0), &m_TabCtrl,ID_List1) ||

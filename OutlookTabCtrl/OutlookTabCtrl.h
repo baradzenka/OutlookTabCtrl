@@ -107,13 +107,13 @@ public:
 	void SetButtonsAlign(ButtonsAlign align);
 	ButtonsAlign GetButtonsAlign() const;
 		// 
-	bool CreateStripeImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
-	void GetStripeImages(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const;
-	bool GetStripeImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const;
-	bool CreateButtonImageList(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
-	void GetButtonImages(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const;
-	bool GetButtonImageLists(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const;
-	void GetImageSizes(CSize *szStripe/*out,or null*/, CSize *szButton/*out,or null*/) const;
+	bool CreateStripeImage(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
+	void GetStripeImage(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const;
+	bool GetStripeImageList(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const;
+	bool CreateButtonImage(HMODULE moduleRes/*or null*/, UINT resNormalID/*or 0*/, UINT resDisableID/*or 0*/, bool pngImage, int imageWidth, COLORREF clrTransp=CLR_NONE);
+	void GetButtonImage(Gdiplus::Bitmap **normal/*out,or null*/, Gdiplus::Bitmap **disable/*out,or null*/) const;
+	bool GetButtonImageList(COLORREF clrDstBack/*or CLR_NONE*/, CImageList *normal/*out,or null*/, CImageList *disable/*out,or null*/) const;
+	void GetImageSize(CSize *szStripe/*out,or null*/, CSize *szButton/*out,or null*/) const;
 	void GetImageTranspColor(COLORREF *clrStripe/*out,or null*/, COLORREF *clrButton/*out,or null*/) const;
 		// 
 	bool SetCaptionFont(CFont *font);
