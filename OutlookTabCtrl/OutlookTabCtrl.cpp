@@ -1714,7 +1714,7 @@ bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID
 	*bmp = NULL;
 		// 
 	if(!moduleRes)
-		moduleRes = AfxFindResourceHandle(resName,(pngImage ? _T("PNG") : RT_BITMAP));
+		moduleRes = AfxFindResourceHandle(MAKEINTRESOURCE(resID),(pngImage ? _T("PNG") : RT_BITMAP));
 	if(moduleRes)
 	{	if(!pngImage)   // bmp.
 			*bmp = ::new (std::nothrow) Gdiplus::Bitmap(moduleRes,MAKEINTRESOURCEW(resID));
