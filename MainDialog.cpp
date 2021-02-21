@@ -180,7 +180,7 @@ void Dialog::EnableControl(int id, bool enable) const
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 //
-bool Dialog::CanSelect(OutlookTabCtrl const *ctrl, HANDLE item) const
+bool Dialog::CanSelect(OutlookTabCtrl const *ctrl, HANDLE item)
 {	const CString text = ctrl->GetItemText(item);
 	if(text=="Calendar")   // just for demonstration using of OutlookTabCtrl::Ability.
 	{	::MessageBox(m_hWnd,_T("You can not select this item."),_T("OutlookTabCtrl::Ability"),MB_OK);

@@ -26,7 +26,7 @@ class OutlookTabCtrl : public CWnd
 ///////////////////////////////////////
 public:
 	struct Ability
-	{	virtual bool CanSelect(OutlookTabCtrl const * /*ctrl*/, HANDLE /*item*/) const { return true; }
+	{	virtual bool CanSelect(OutlookTabCtrl const * /*ctrl*/, HANDLE /*item*/) { return true; }
 	};
 	struct Notify
 	{	virtual void OnSelectionChanged(OutlookTabCtrl * /*ctrl*/) {}
@@ -36,28 +36,28 @@ public:
 	struct ToolTip
 	{	virtual CToolTipCtrl *CreateToolTip(OutlookTabCtrl * /*ctrl*/) { return NULL; }
 		virtual void DestroyToolTip(CToolTipCtrl * /*tooltip*/) {}
-		virtual bool HasButtonTooltip(OutlookTabCtrl const * /*ctrl*/, HANDLE /*item*/) const { return true; }
+		virtual bool HasButtonTooltip(OutlookTabCtrl const * /*ctrl*/, HANDLE /*item*/) { return true; }
 	};
 	struct Draw
-	{	virtual void DrawBegin(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/) const {}
-		virtual void DrawBorder(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) const {}
-		virtual void DrawCaption(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) const {}
-		virtual void DrawEmptyWindowsArea(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) const {}
-		virtual void DrawSplitter(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) const {}
-		virtual void DrawStripe(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, HANDLE /*item*/, bool /*drawSeparator*/) const {}
-		virtual void DrawButton(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, HANDLE /*item*/) const {}
-		virtual void DrawButtonsBackground(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) const {}
-		virtual void DrawButtonMenu(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) const {}
-		virtual void DrawEnd(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/) const {}
+	{	virtual void DrawBegin(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/) {}
+		virtual void DrawBorder(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) {}
+		virtual void DrawCaption(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) {}
+		virtual void DrawEmptyWindowsArea(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) {}
+		virtual void DrawSplitter(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) {}
+		virtual void DrawStripe(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, HANDLE /*item*/, bool /*drawSeparator*/) {}
+		virtual void DrawButton(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, HANDLE /*item*/) {}
+		virtual void DrawButtonsBackground(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) {}
+		virtual void DrawButtonMenu(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/, CRect const * /*rect*/) {}
+		virtual void DrawEnd(OutlookTabCtrl const * /*ctrl*/, CDC * /*dc*/) {}
 	};
 	interface IRecalc
-	{	virtual int GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
-		virtual int GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
-		virtual int GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
-		virtual int GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
-		virtual int GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
-		virtual int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
-		virtual int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc const *base) const = 0;
+	{	virtual int GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
+		virtual int GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
+		virtual int GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
+		virtual int GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
+		virtual int GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
+		virtual int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
+		virtual int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) = 0;
 	};
 
 public:
@@ -264,39 +264,39 @@ protected:
 		// OutlookTabCtrl::ToolTip.
 	CToolTipCtrl *CreateToolTip(OutlookTabCtrl *ctrl) override;
 	void DestroyToolTip(CToolTipCtrl *tooltip) override;
-	bool HasButtonTooltip(OutlookTabCtrl const *ctrl, HANDLE item) const override;
+	bool HasButtonTooltip(OutlookTabCtrl const *ctrl, HANDLE item) override;
 
 		// OutlookTabCtrl::Draw.
-	void DrawBorder(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
-	void DrawCaption(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
-	void DrawEmptyWindowsArea(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
-	void DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
-	void DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, HANDLE item, bool drawSeparator) const override;
-	void DrawButton(OutlookTabCtrl const *ctrl, CDC * dc, HANDLE item) const override;
-	void DrawButtonsBackground(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
-	void DrawButtonMenu(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
+	void DrawBorder(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
+	void DrawCaption(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
+	void DrawEmptyWindowsArea(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
+	void DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
+	void DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, HANDLE item, bool drawSeparator) override;
+	void DrawButton(OutlookTabCtrl const *ctrl, CDC * dc, HANDLE item) override;
+	void DrawButtonsBackground(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
+	void DrawButtonMenu(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
 
 		// OutlookTabCtrl::IRecalc.
-	int GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
-	int GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
-	int GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
-	int GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
-	int GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
-	int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
-	int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc const *base) const override;
+	int GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
+	int GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc *base) override;
+	int GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc *base) override;
+	int GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc *base) override;
+	int GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc *base) override;
+	int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
+	int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 
-	virtual COLORREF GetEmptyWindowsAreaColor() const { return ::GetSysColor(COLOR_WINDOW); }
-	virtual COLORREF GetBorderColor() const { return ::GetSysColor(COLOR_BTNSHADOW); }
-	virtual COLORREF GetCaptionColor() const { return ::GetSysColor(COLOR_BTNSHADOW); }
-	virtual COLORREF GetCaptionTextColor() const { return ::GetSysColor(COLOR_CAPTIONTEXT); }
-	virtual COLORREF GetSplitterBackColor() const { return ::GetSysColor(COLOR_BTNFACE); }
-	virtual COLORREF GetSplitterDotsColor() const { return ::GetSysColor(COLOR_3DDKSHADOW); }
-	virtual COLORREF GetSeparationLineColor() const { return ::GetSysColor(COLOR_BTNSHADOW); }
-	virtual COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const { return ::GetSysColor(COLOR_WINDOWTEXT); }
-	virtual COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const { return ::GetSysColor(COLOR_GRAYTEXT); }
-	virtual COLORREF GetButtonTextColor(OutlookTabCtrl::ItemState const *state) const { return GetStripeTextColor(state); }
-	virtual COLORREF GetDisabledButtonTextColor(OutlookTabCtrl::ItemState const *state) const { return GetDisabledStripeTextColor(state); }
-	virtual COLORREF GetMenuButtonImageColor() const { return ::GetSysColor(COLOR_WINDOWTEXT); }
+	virtual COLORREF GetEmptyWindowsAreaColor() { return ::GetSysColor(COLOR_WINDOW); }
+	virtual COLORREF GetBorderColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
+	virtual COLORREF GetCaptionColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
+	virtual COLORREF GetCaptionTextColor() { return ::GetSysColor(COLOR_CAPTIONTEXT); }
+	virtual COLORREF GetSplitterBackColor() { return ::GetSysColor(COLOR_BTNFACE); }
+	virtual COLORREF GetSplitterDotsColor() { return ::GetSysColor(COLOR_3DDKSHADOW); }
+	virtual COLORREF GetSeparationLineColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
+	virtual COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) { return ::GetSysColor(COLOR_WINDOWTEXT); }
+	virtual COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) { return ::GetSysColor(COLOR_GRAYTEXT); }
+	virtual COLORREF GetButtonTextColor(OutlookTabCtrl::ItemState const *state) { return GetStripeTextColor(state); }
+	virtual COLORREF GetDisabledButtonTextColor(OutlookTabCtrl::ItemState const *state) { return GetDisabledStripeTextColor(state); }
+	virtual COLORREF GetMenuButtonImageColor() { return ::GetSysColor(COLOR_WINDOWTEXT); }
 
 	virtual int GetCaptionTextLeftMargin() const { return 7; }
 	virtual int GetStripeContentLeftMargin() const { return 5; }
@@ -304,8 +304,9 @@ protected:
 	virtual int GetButtonContentLeftMargin() const { return 5; }
 	virtual int GetButtonImageTextGap() const { return 5; }
 
-	virtual void GetHighlightStateOfItem(OutlookTabCtrl const *ctrl, OutlookTabCtrl::ItemState const *state, bool *selectLight/*out*/, bool *selectDark/*out*/) const;
-	virtual void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) const;
+	virtual void GetHighlightStateOfItem(OutlookTabCtrl const *ctrl, OutlookTabCtrl::ItemState const *state, bool *selectLight/*out*/, bool *selectDark/*out*/);
+	virtual void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect);
+
 	COLORREF MixingColors(COLORREF src, COLORREF dst, int percent) const;
 	CSize GetTextSize(CFont *font, CString const &text) const;
 	void DrawSplitterDots(CDC *dc, CRect const *rect, int count, int size, COLORREF color) const;
@@ -330,56 +331,56 @@ class OutlookTabCtrlCustomTooltip : public OutlookTabCtrlCustomBase
 /////////////////////////////////////////////////////////////////////////////
 // 
 class OutlookTabCtrlCustom2 : public OutlookTabCtrlCustomTooltip
-{	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) const override;
+{	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
 
-	COLORREF GetEmptyWindowsAreaColor() const override { return RGB(255,255,255); }
-	COLORREF GetBorderColor() const override { return RGB(83,83,83); }
-	COLORREF GetCaptionColor() const override { return RGB(160,160,160); }
-	COLORREF GetCaptionTextColor() const override { return RGB(255,255,255); }
-	COLORREF GetSplitterBackColor() const override { return RGB(180,180,180); }
-	COLORREF GetSplitterDotsColor() const override { return RGB(35,35,35); }
-	COLORREF GetSeparationLineColor() const override { return RGB(160,160,160); }
-	COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const override { return RGB(0,0,0); }
-	COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const override { return RGB(109,109,109); }
-	COLORREF GetMenuButtonImageColor() const override { return RGB(0,0,0); }
+	COLORREF GetEmptyWindowsAreaColor() override { return RGB(255,255,255); }
+	COLORREF GetBorderColor() override { return RGB(83,83,83); }
+	COLORREF GetCaptionColor() override { return RGB(160,160,160); }
+	COLORREF GetCaptionTextColor() override { return RGB(255,255,255); }
+	COLORREF GetSplitterBackColor() override { return RGB(180,180,180); }
+	COLORREF GetSplitterDotsColor() override { return RGB(35,35,35); }
+	COLORREF GetSeparationLineColor() override { return RGB(160,160,160); }
+	COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) override { return RGB(0,0,0); }
+	COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) override { return RGB(109,109,109); }
+	COLORREF GetMenuButtonImageColor() override { return RGB(0,0,0); }
 };
 /////////////////////////////////////////////////////////////////////////////
 // 
 class OutlookTabCtrlCustom3 : public OutlookTabCtrlCustomTooltip
 {		// OutlookTabCtrl::Draw.
-	void DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) const override;
+	void DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
 
 		// OutlookTabCtrl::IRecalc.
-	int GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc const * /*base*/) const override { return (ctrl->IsSplitterActive() ? 7 : 5); }
+	int GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc * /*base*/) override { return (ctrl->IsSplitterActive() ? 7 : 5); }
 
-	COLORREF GetEmptyWindowsAreaColor() const override { return RGB(255,255,255); }
-	COLORREF GetBorderColor() const override { return RGB(77,115,61); }
-	COLORREF GetCaptionColor() const override { return RGB(160,160,160); }
-	COLORREF GetCaptionTextColor() const override { return RGB(255,255,255); }
-	COLORREF GetSeparationLineColor() const override { return RGB(77,115,61); }
-	COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const *state) const override { return (!state->highlighted ? RGB(60,60,60) : RGB(0,0,0)); }
-	COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const override { return RGB(128,128,128); }
-	COLORREF GetMenuButtonImageColor() const override { return RGB(77,115,61); }
+	COLORREF GetEmptyWindowsAreaColor() override { return RGB(255,255,255); }
+	COLORREF GetBorderColor() override { return RGB(77,115,61); }
+	COLORREF GetCaptionColor() override { return RGB(160,160,160); }
+	COLORREF GetCaptionTextColor() override { return RGB(255,255,255); }
+	COLORREF GetSeparationLineColor() override { return RGB(77,115,61); }
+	COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const *state) override { return (!state->highlighted ? RGB(60,60,60) : RGB(0,0,0)); }
+	COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) override { return RGB(128,128,128); }
+	COLORREF GetMenuButtonImageColor() override { return RGB(77,115,61); }
 
-	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) const override;
+	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
 	void DrawGradient(CDC *dc, CRect const *rc, COLORREF clrTop, COLORREF clrBottom) const;
 	void DrawSplitterDots(CDC *dc, CRect const *rect, int count, int size, int offset, COLORREF clrTopDot, COLORREF clrBottomDot) const;
 };
 /////////////////////////////////////////////////////////////////////////////
 // 
 class OutlookTabCtrlCustom4 : public OutlookTabCtrlCustomTooltip
-{	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) const override;
+{	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
 
-	COLORREF GetEmptyWindowsAreaColor() const override { return RGB(255,255,255); }
-	COLORREF GetBorderColor() const override { return RGB(41,57,85); }
-	COLORREF GetCaptionColor() const override { return RGB(41,57,85); }
-	COLORREF GetCaptionTextColor() const override { return RGB(250,250,250); }
-	COLORREF GetSplitterBackColor() const override { return RGB(41,57,85); }
-	COLORREF GetSplitterDotsColor() const override { return RGB(230,230,230); }
-	COLORREF GetSeparationLineColor() const override { return RGB(41,57,85); }
-	COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const override { return RGB(255,255,255); }
-	COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) const override { return RGB(160,160,160); }
-	COLORREF GetMenuButtonImageColor() const override { return RGB(235,235,235); }
+	COLORREF GetEmptyWindowsAreaColor() override { return RGB(255,255,255); }
+	COLORREF GetBorderColor() override { return RGB(41,57,85); }
+	COLORREF GetCaptionColor() override { return RGB(41,57,85); }
+	COLORREF GetCaptionTextColor() override { return RGB(250,250,250); }
+	COLORREF GetSplitterBackColor() override { return RGB(41,57,85); }
+	COLORREF GetSplitterDotsColor() override { return RGB(230,230,230); }
+	COLORREF GetSeparationLineColor() override { return RGB(41,57,85); }
+	COLORREF GetStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) override { return RGB(255,255,255); }
+	COLORREF GetDisabledStripeTextColor(OutlookTabCtrl::ItemState const * /*state*/) override { return RGB(160,160,160); }
+	COLORREF GetMenuButtonImageColor() override { return RGB(235,235,235); }
 };
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////

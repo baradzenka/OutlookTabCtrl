@@ -5,19 +5,19 @@
 
 // 
 class Dialog : public CDialog,
-	public OutlookTabCtrl::Notify,
-	public OutlookTabCtrl::Ability
+	public OutlookTabCtrl::Ability,
+	public OutlookTabCtrl::Notify
 {
 public:
 	Dialog(CWnd *parent);
 
-private:   // OutlookTabCtrl::Notify.
-	virtual void OnSelectionChanged(OutlookTabCtrl *ctrl);
-	virtual void OnRightButtonReleased(OutlookTabCtrl *ctrl, CPoint pt);
-	virtual void OnMenuButtonClicked(OutlookTabCtrl *ctrl, CRect const *rect);
-
 private:   // OutlookTabCtrl::Ability.
-	virtual bool CanSelect(OutlookTabCtrl const *ctrl, HANDLE item) const;
+	bool CanSelect(OutlookTabCtrl const *ctrl, HANDLE item) override;
+
+private:   // OutlookTabCtrl::Notify.
+	void OnSelectionChanged(OutlookTabCtrl *ctrl) override;
+	void OnRightButtonReleased(OutlookTabCtrl *ctrl, CPoint pt) override;
+	void OnMenuButtonClicked(OutlookTabCtrl *ctrl, CRect const *rect) override;
 
 private:
 	CRect m_rcInit;
