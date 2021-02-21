@@ -1,7 +1,7 @@
 #pragma once
 
-
 #include "ManageDialog.h"
+
 
 // 
 class Dialog : public CDialog,
@@ -22,7 +22,7 @@ private:   // OutlookTabCtrl::Notify.
 private:
 	CRect m_rcInit;
 	OutlookTabCtrl m_OutlookTabCtrl;
-	OutlookTabCtrlCustomTooltip m_Style1;
+	OutlookTabCtrlCustom1 m_Style1;
 	OutlookTabCtrlCustom2 m_Style2;
 	OutlookTabCtrlCustom3 m_Style3;
 	OutlookTabCtrlCustom4 m_Style4;

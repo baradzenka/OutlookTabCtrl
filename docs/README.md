@@ -15,7 +15,7 @@ To create the control and add elements to it, you can do the next steps:
 ```cpp
 #include "OutlookTabCtrl.h"
 
-OutlookTabCtrlEx<OutlookTabCtrlCustomBase> m_TabCtrl;
+OutlookTabCtrlEx<OutlookTabCtrlCustom1> m_TabCtrl;
 CListCtrl m_List1, m_List2;
 
 ...
@@ -47,7 +47,7 @@ if( !m_TabCtrl.LoadState(AfxGetApp(),"OutlookTabCtrl","State") )
 m_TabCtrl.Update();
 ````
 
-The `OutlookTabCtrl` class does not draw itself. To do this, inherit from the `OutlookTabCtrl::Draw` class and implement its functions. A pointer to `OutlookTabCtrl::Draw` must be passed to the control by calling the `SetDrawManager` function. The classes `OutlookTabCtrlCustomBase`, `OutlookTabCtrlCustom2`, `OutlookTabCtrlCustom3`, `OutlookTabCtrlCustom4` are ready-made implementations of the `OutlookTabCtrl::Draw` class. Each of them renders `OutlookTabCtrl` in its own style. The `OutlookTabCtrlEx` class helps you combine `OutlookTabCtrl` with the render class. For example, like this: `OutlookTabCtrlEx<OutlookTabCtrlCustom2> ctrl;` .
+The `OutlookTabCtrl` class does not draw itself. To do this, inherit from the `OutlookTabCtrl::Draw` class and implement its functions. A pointer to `OutlookTabCtrl::Draw` must be passed to the control by calling the `SetDrawManager` function. The classes `OutlookTabCtrlCustom1`, `OutlookTabCtrlCustom2`, `OutlookTabCtrlCustom3`, `OutlookTabCtrlCustom4` are ready-made implementations of the `OutlookTabCtrl::Draw` class. Each of them renders `OutlookTabCtrl` in its own style. The `OutlookTabCtrlEx` class helps you combine `OutlookTabCtrl` with the render class. For example, like this: `OutlookTabCtrlEx<OutlookTabCtrlCustom2> ctrl;` .
 
 The `OutlookTabCtrl::IRecalc` interface sets the sizes of the areas in the control. The `OutlookTabCtrl` class has its own `OutlookTabCtrl::IRecalc` implementation. But you can also make your own implementation of the `OutlookTabCtrl::IRecalc` interface and pass a pointer to it in the control using the `SetRecalcManager` function.
 

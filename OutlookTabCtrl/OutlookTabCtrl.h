@@ -253,14 +253,13 @@ protected:
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-struct OutlookTabCtrlCustomBase : 
+struct OutlookTabCtrlCustom1 : 
 	OutlookTabCtrl::ToolTip,
 	OutlookTabCtrl::Draw,
 	OutlookTabCtrl::IRecalc
 {
 	void Install(OutlookTabCtrl *ctrl);
 
-private:
 		// OutlookTabCtrl::ToolTip.
 	CToolTipCtrl *CreateToolTip(OutlookTabCtrl *ctrl) override;
 	void DestroyToolTip(CToolTipCtrl *tooltip) override;
@@ -285,7 +284,6 @@ private:
 	int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 	int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 
-protected:
 	virtual COLORREF GetEmptyWindowsAreaColor() { return ::GetSysColor(COLOR_WINDOW); }
 	virtual COLORREF GetBorderColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
 	virtual COLORREF GetCaptionColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
@@ -317,21 +315,7 @@ protected:
 };
 /////////////////////////////////////////////////////////////////////////////
 // 
-class OutlookTabCtrlCustomTooltip : public OutlookTabCtrlCustomBase
-{
-	#ifdef AFX_TOOLTIP_TYPE_ALL
-		CToolTipCtrl *CreateToolTip(OutlookTabCtrl *ctrl) override
-		{	CToolTipCtrl *tooltip = NULL;
-			return (CTooltipManager::CreateToolTip(tooltip/*out*/,ctrl,AFX_TOOLTIP_TYPE_TAB) ? tooltip : NULL);
-		}
-		void DestroyToolTip(CToolTipCtrl *tooltip) override
-		{	CTooltipManager::DeleteToolTip(tooltip);
-		}
-	#endif
-};
-/////////////////////////////////////////////////////////////////////////////
-// 
-class OutlookTabCtrlCustom2 : public OutlookTabCtrlCustomTooltip
+struct OutlookTabCtrlCustom2 : OutlookTabCtrlCustom1
 {	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
 
 	COLORREF GetEmptyWindowsAreaColor() override { return RGB(255,255,255); }
@@ -347,7 +331,7 @@ class OutlookTabCtrlCustom2 : public OutlookTabCtrlCustomTooltip
 };
 /////////////////////////////////////////////////////////////////////////////
 // 
-class OutlookTabCtrlCustom3 : public OutlookTabCtrlCustomTooltip
+struct OutlookTabCtrlCustom3 : OutlookTabCtrlCustom1
 {		// OutlookTabCtrl::Draw.
 	void DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect) override;
 
@@ -371,7 +355,7 @@ protected:
 };
 /////////////////////////////////////////////////////////////////////////////
 // 
-class OutlookTabCtrlCustom4 : public OutlookTabCtrlCustomTooltip
+struct OutlookTabCtrlCustom4 : OutlookTabCtrlCustom1
 {	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
 
 	COLORREF GetEmptyWindowsAreaColor() override { return RGB(255,255,255); }
@@ -389,8 +373,8 @@ class OutlookTabCtrlCustom4 : public OutlookTabCtrlCustomTooltip
 /////////////////////////////////////////////////////////////////////////////
 /*
   To use OutlookTabCtrl along with a style class:
-    OutlookTabCtrlEx<OutlookTabCtrlCustomTooltip> m_OutlookTabCtrl;
-  OutlookTabCtrlCustom2, OutlookTabCtrlCustom3 or OutlookTabCtrlCustom4 can be used instead of OutlookTabCtrlCustomTooltip.  
+    OutlookTabCtrlEx<OutlookTabCtrlCustom1> m_OutlookTabCtrl;
+  OutlookTabCtrlCustom2, OutlookTabCtrlCustom3 or OutlookTabCtrlCustom4 can be used instead of OutlookTabCtrlCustom1.  
 */ 
 template<typename STYLE>
 struct OutlookTabCtrlEx : OutlookTabCtrl

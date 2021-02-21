@@ -1808,14 +1808,14 @@ bool OutlookTabCtrl::Private::CreateImageList(Gdiplus::Bitmap *bmp, int imageWid
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-// OutlookTabCtrlCustomBase.
+// OutlookTabCtrlCustom1.
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-const int OutlookTabCtrlCustomBase::m_iMenuImageWidth = 8;
-const int OutlookTabCtrlCustomBase::m_iMenuImageHeight = 13;
+const int OutlookTabCtrlCustom1::m_iMenuImageWidth = 8;
+const int OutlookTabCtrlCustom1::m_iMenuImageHeight = 13;
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::Install(OutlookTabCtrl *ctrl)
+void OutlookTabCtrlCustom1::Install(OutlookTabCtrl *ctrl)
 {	ctrl->SetToolTipManager(this);
 	ctrl->SetDrawManager(this);
 	ctrl->SetRecalcManager(this);
@@ -1823,27 +1823,38 @@ void OutlookTabCtrlCustomBase::Install(OutlookTabCtrl *ctrl)
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-CToolTipCtrl *OutlookTabCtrlCustomBase::CreateToolTip(OutlookTabCtrl *ctrl)
-{	CToolTipCtrl *toolTip = ::new (std::nothrow) CToolTipCtrl;
-	if(toolTip)
-	{	if( !toolTip->Create(ctrl,TTS_ALWAYSTIP) )
-		{	::delete toolTip;
-			return NULL;
+CToolTipCtrl *OutlookTabCtrlCustom1::CreateToolTip(OutlookTabCtrl *ctrl)
+{
+	#ifdef AFX_TOOLTIP_TYPE_ALL   // for MFC Feature Pack.
+		CToolTipCtrl *tooltip = NULL;
+		return (CTooltipManager::CreateToolTip(tooltip/*out*/,ctrl,AFX_TOOLTIP_TYPE_TAB) ? tooltip : NULL);
+	#else
+		CToolTipCtrl *toolTip = ::new (std::nothrow) CToolTipCtrl;
+		if(toolTip)
+		{	if( !toolTip->Create(ctrl,TTS_ALWAYSTIP) )
+			{	::delete toolTip;
+				return NULL;
+			}
+				// 
+			DWORD dwClassStyle = ::GetClassLong(toolTip->m_hWnd,GCL_STYLE);
+			dwClassStyle |= CS_DROPSHADOW;   // enables the drop shadow effect.
+			::SetClassLong(toolTip->m_hWnd,GCL_STYLE,dwClassStyle);
 		}
-			// 
-		DWORD dwClassStyle = ::GetClassLong(toolTip->m_hWnd,GCL_STYLE);
-		dwClassStyle |= CS_DROPSHADOW;   // enables the drop shadow effect.
-		::SetClassLong(toolTip->m_hWnd,GCL_STYLE,dwClassStyle);
-	}
-	return toolTip;
+		return toolTip;
+	#endif
 }
 // 
-void OutlookTabCtrlCustomBase::DestroyToolTip(CToolTipCtrl *tooltip)
-{	::delete tooltip;
+void OutlookTabCtrlCustom1::DestroyToolTip(CToolTipCtrl *tooltip)
+{	
+	#ifdef AFX_TOOLTIP_TYPE_ALL   // for MFC Feature Pack.
+		CTooltipManager::DeleteToolTip(tooltip);
+	#else
+		::delete tooltip;
+	#endif
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-bool OutlookTabCtrlCustomBase::HasButtonTooltip(OutlookTabCtrl const *ctrl, HANDLE item)
+bool OutlookTabCtrlCustom1::HasButtonTooltip(OutlookTabCtrl const *ctrl, HANDLE item)
 {	if( !ctrl->IsButtonTextVisible() )
 		return true;
 		// 
@@ -1879,13 +1890,13 @@ bool OutlookTabCtrlCustomBase::HasButtonTooltip(OutlookTabCtrl const *ctrl, HAND
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawBorder(OutlookTabCtrl const * /*ctrl*/, CDC *dc, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawBorder(OutlookTabCtrl const * /*ctrl*/, CDC *dc, CRect const *rect)
 {	const COLORREF clr = GetBorderColor();
 	dc->Draw3dRect(rect,clr,clr);
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawCaption(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawCaption(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
 {	dc->FillSolidRect(rect,GetCaptionColor());
 		// 
 	HANDLE item = ctrl->GetSelectedItem();
@@ -1902,12 +1913,12 @@ void OutlookTabCtrlCustomBase::DrawCaption(OutlookTabCtrl const *ctrl, CDC *dc, 
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawEmptyWindowsArea(OutlookTabCtrl const * /*ctrl*/, CDC *dc, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawEmptyWindowsArea(OutlookTabCtrl const * /*ctrl*/, CDC *dc, CRect const *rect)
 {	dc->FillSolidRect(rect, GetEmptyWindowsAreaColor() );
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawSplitterDots(CDC *dc, CRect const *rect, int count, int size, COLORREF color) const
+void OutlookTabCtrlCustom1::DrawSplitterDots(CDC *dc, CRect const *rect, int count, int size, COLORREF color) const
 {	int x = rect->CenterPoint().x - (size*(count+count-1))/2;
 	const int y = rect->CenterPoint().y - size/2;
 		// 
@@ -1918,7 +1929,7 @@ void OutlookTabCtrlCustomBase::DrawSplitterDots(CDC *dc, CRect const *rect, int 
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
 {	dc->FillSolidRect(rect, GetSplitterBackColor() );
 		// 
 	if( ctrl->IsSplitterActive() )
@@ -1935,7 +1946,7 @@ void OutlookTabCtrlCustomBase::DrawSplitter(OutlookTabCtrl const *ctrl, CDC *dc,
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, HANDLE item, bool drawSeparator)
+void OutlookTabCtrlCustom1::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, HANDLE item, bool drawSeparator)
 {	CRect rc = ctrl->GetItemRect(item);
 		// 
 		// draw separator (border).
@@ -1991,7 +2002,7 @@ void OutlookTabCtrlCustomBase::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, H
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, HANDLE item)
+void OutlookTabCtrlCustom1::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, HANDLE item)
 {	CRect rc = ctrl->GetItemRect(item);
 		// 
 		// draw separator.
@@ -2057,13 +2068,13 @@ void OutlookTabCtrlCustomBase::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, H
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawButtonsBackground(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawButtonsBackground(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
 {	static const OutlookTabCtrl::ItemState state = {false,false,false};
 	DrawBackground(ctrl,dc,&state,rect);
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawButtonMenu(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawButtonMenu(OutlookTabCtrl const *ctrl, CDC *dc, CRect const *rect)
 {	static CBrush brButtonMenu;
 		// 
 	if(!brButtonMenu.m_hObject)
@@ -2098,7 +2109,7 @@ void OutlookTabCtrlCustomBase::DrawButtonMenu(OutlookTabCtrl const *ctrl, CDC *d
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::GetHighlightStateOfItem(OutlookTabCtrl const *ctrl, OutlookTabCtrl::ItemState const *state, bool *selectLight/*out*/, bool *selectDark/*out*/)
+void OutlookTabCtrlCustom1::GetHighlightStateOfItem(OutlookTabCtrl const *ctrl, OutlookTabCtrl::ItemState const *state, bool *selectLight/*out*/, bool *selectDark/*out*/)
 {	const bool bPushed = ctrl->IsAnyStripeOrButtonPushed();
 		// 
 	if(selectLight)
@@ -2108,7 +2119,7 @@ void OutlookTabCtrlCustomBase::GetHighlightStateOfItem(OutlookTabCtrl const *ctr
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-COLORREF OutlookTabCtrlCustomBase::MixingColors(COLORREF src, COLORREF dst, int percent) const
+COLORREF OutlookTabCtrlCustom1::MixingColors(COLORREF src, COLORREF dst, int percent) const
 {	const int ipercent = 100 - percent;
 	return RGB(
 		(GetRValue(src) * percent + GetRValue(dst) * ipercent) / 100,
@@ -2117,7 +2128,7 @@ COLORREF OutlookTabCtrlCustomBase::MixingColors(COLORREF src, COLORREF dst, int 
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-void OutlookTabCtrlCustomBase::DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect)
+void OutlookTabCtrlCustom1::DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect)
 {	bool selectLight, selectDark;
 	GetHighlightStateOfItem(ctrl,state,&selectLight/*out*/,&selectDark/*out*/);
 		// 
@@ -2136,7 +2147,7 @@ void OutlookTabCtrlCustomBase::DrawBackground(OutlookTabCtrl const *ctrl, CDC *d
 }
 /////////////////////////////////////////////////////////////////////////////
 //
-CSize OutlookTabCtrlCustomBase::GetTextSize(CFont *font, CString const &text) const
+CSize OutlookTabCtrlCustom1::GetTextSize(CFont *font, CString const &text) const
 {	CWindowDC dc(NULL);
 		// 
 	CFont *pOldFont = dc.SelectObject(font);
@@ -2146,7 +2157,7 @@ CSize OutlookTabCtrlCustomBase::GetTextSize(CFont *font, CString const &text) co
 }
 /////////////////////////////////////////////////////////////////////////////
 //
-void OutlookTabCtrlCustomBase::DrawImage(CDC *dc, Gdiplus::Bitmap *bmp, CPoint const &ptDst, int image, CSize const &szSrc, COLORREF clrTransp) const
+void OutlookTabCtrlCustom1::DrawImage(CDC *dc, Gdiplus::Bitmap *bmp, CPoint const &ptDst, int image, CSize const &szSrc, COLORREF clrTransp) const
 {	Gdiplus::Graphics gr(dc->m_hDC);
 	if(clrTransp==CLR_NONE)
 		gr.DrawImage(bmp, ptDst.x,ptDst.y, image*szSrc.cx,0,szSrc.cx,szSrc.cy, Gdiplus::UnitPixel);
@@ -2161,13 +2172,13 @@ void OutlookTabCtrlCustomBase::DrawImage(CDC *dc, Gdiplus::Bitmap *bmp, CPoint c
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-int OutlookTabCtrlCustomBase::GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetBorderWidth(ctrl,base); }
-int OutlookTabCtrlCustomBase::GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetCaptionHeight(ctrl,base); }
-int OutlookTabCtrlCustomBase::GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetSplitterHeight(ctrl,base); }
-int OutlookTabCtrlCustomBase::GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetStripeHeight(ctrl,base); }
-int OutlookTabCtrlCustomBase::GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return std::max(3+m_iMenuImageHeight+3, base->GetButtonHeight(ctrl,base)); }
-int OutlookTabCtrlCustomBase::GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetMinButtonWidth(ctrl,base); }
-int OutlookTabCtrlCustomBase::GetMenuButtonWidth(OutlookTabCtrl const * /*ctrl*/, IRecalc * /*base*/) { return 5 + m_iMenuImageWidth + 5; }
+int OutlookTabCtrlCustom1::GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetBorderWidth(ctrl,NULL); }
+int OutlookTabCtrlCustom1::GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetCaptionHeight(ctrl,NULL); }
+int OutlookTabCtrlCustom1::GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetSplitterHeight(ctrl,NULL); }
+int OutlookTabCtrlCustom1::GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetStripeHeight(ctrl,NULL); }
+int OutlookTabCtrlCustom1::GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return std::max(3+m_iMenuImageHeight+3, base->GetButtonHeight(ctrl,NULL)); }
+int OutlookTabCtrlCustom1::GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetMinButtonWidth(ctrl,NULL); }
+int OutlookTabCtrlCustom1::GetMenuButtonWidth(OutlookTabCtrl const * /*ctrl*/, IRecalc * /*base*/) { return 5 + m_iMenuImageWidth + 5; }
 // 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
