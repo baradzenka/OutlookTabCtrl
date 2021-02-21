@@ -260,7 +260,7 @@ struct OutlookTabCtrlCustomBase :
 {
 	void Install(OutlookTabCtrl *ctrl);
 
-protected:
+private:
 		// OutlookTabCtrl::ToolTip.
 	CToolTipCtrl *CreateToolTip(OutlookTabCtrl *ctrl) override;
 	void DestroyToolTip(CToolTipCtrl *tooltip) override;
@@ -285,6 +285,7 @@ protected:
 	int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 	int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 
+protected:
 	virtual COLORREF GetEmptyWindowsAreaColor() { return ::GetSysColor(COLOR_WINDOW); }
 	virtual COLORREF GetBorderColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
 	virtual COLORREF GetCaptionColor() { return ::GetSysColor(COLOR_BTNSHADOW); }
@@ -364,6 +365,7 @@ class OutlookTabCtrlCustom3 : public OutlookTabCtrlCustomTooltip
 
 	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
 
+protected:
 	void DrawGradient(CDC *dc, CRect const *rc, COLORREF clrTop, COLORREF clrBottom) const;
 	void DrawSplitterDots(CDC *dc, CRect const *rect, int count, int size, int offset, COLORREF clrTopDot, COLORREF clrBottomDot) const;
 };
