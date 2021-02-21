@@ -1829,17 +1829,21 @@ CToolTipCtrl *OutlookTabCtrlCustom1::CreateToolTip(OutlookTabCtrl *ctrl)
 		CToolTipCtrl *tooltip = NULL;
 		return (CTooltipManager::CreateToolTip(tooltip/*out*/,ctrl,AFX_TOOLTIP_TYPE_TAB) ? tooltip : NULL);
 	#else
-		CToolTipCtrl *toolTip = ::new (std::nothrow) CToolTipCtrl;
-		if(toolTip)
-		{	if( !toolTip->Create(ctrl,TTS_ALWAYSTIP) )
-			{	::delete toolTip;
-				return NULL;
-			}
-				// 
-			DWORD dwClassStyle = ::GetClassLong(toolTip->m_hWnd,GCL_STYLE);
-			dwClassStyle |= CS_DROPSHADOW;   // enables the drop shadow effect.
-			::SetClassLong(toolTip->m_hWnd,GCL_STYLE,dwClassStyle);
+		CToolTipCtrl *toolTip = NULL;
+		try
+		{	toolTip = new CToolTipCtrl;
 		}
+		catch(std::bad_alloc &)
+		{	return NULL;
+		}
+		if( !toolTip->Create(ctrl,TTS_ALWAYSTIP) )
+		{	delete toolTip;
+			return NULL;
+		}
+			// 
+		DWORD dwClassStyle = ::GetClassLong(toolTip->m_hWnd,GCL_STYLE);
+		dwClassStyle |= CS_DROPSHADOW;   // enables the drop shadow effect.
+		::SetClassLong(toolTip->m_hWnd,GCL_STYLE,dwClassStyle);
 		return toolTip;
 	#endif
 }
@@ -1849,7 +1853,7 @@ void OutlookTabCtrlCustom1::DestroyToolTip(CToolTipCtrl *tooltip)
 	#ifdef AFX_TOOLTIP_TYPE_ALL   // for MFC Feature Pack.
 		CTooltipManager::DeleteToolTip(tooltip);
 	#else
-		::delete tooltip;
+		delete tooltip;
 	#endif
 }
 /////////////////////////////////////////////////////////////////////////////
