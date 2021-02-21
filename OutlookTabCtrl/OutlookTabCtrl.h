@@ -298,11 +298,11 @@ protected:
 	virtual COLORREF GetDisabledButtonTextColor(OutlookTabCtrl::ItemState const *state) { return GetDisabledStripeTextColor(state); }
 	virtual COLORREF GetMenuButtonImageColor() { return ::GetSysColor(COLOR_WINDOWTEXT); }
 
-	virtual int GetCaptionTextLeftMargin() const { return 7; }
-	virtual int GetStripeContentLeftMargin() const { return 5; }
-	virtual int GetStripeImageTextGap() const { return 5; }
-	virtual int GetButtonContentLeftMargin() const { return 5; }
-	virtual int GetButtonImageTextGap() const { return 5; }
+	virtual int GetCaptionTextLeftMargin() { return 7; }
+	virtual int GetStripeContentLeftMargin() { return 5; }
+	virtual int GetStripeImageTextGap() { return 5; }
+	virtual int GetButtonContentLeftMargin() { return 5; }
+	virtual int GetButtonImageTextGap() { return 5; }
 
 	virtual void GetHighlightStateOfItem(OutlookTabCtrl const *ctrl, OutlookTabCtrl::ItemState const *state, bool *selectLight/*out*/, bool *selectDark/*out*/);
 	virtual void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect);
@@ -363,6 +363,7 @@ class OutlookTabCtrlCustom3 : public OutlookTabCtrlCustomTooltip
 	COLORREF GetMenuButtonImageColor() override { return RGB(77,115,61); }
 
 	void DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, OutlookTabCtrl::ItemState const *state, CRect const *rect) override;
+
 	void DrawGradient(CDC *dc, CRect const *rc, COLORREF clrTop, COLORREF clrBottom) const;
 	void DrawSplitterDots(CDC *dc, CRect const *rect, int count, int size, int offset, COLORREF clrTopDot, COLORREF clrBottomDot) const;
 };
