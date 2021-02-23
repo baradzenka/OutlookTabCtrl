@@ -60,6 +60,9 @@ private:   // OutlookTabCtrl::IRecalc.
 	int GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 	int GetMenuButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) override;
 
+private:
+	ULONG_PTR m_gdiPlusToken;
+
 public:
 	Ability *m_pAbilityMngr;
 	Notify *m_pNotifyMngr;
@@ -78,16 +81,13 @@ public:
 	CFont m_FontCaption, m_FontStripes, m_FontButtons;
 	HCURSOR m_hCurDrag;
 		// 
-	bool m_bDrawBorder;
+	bool m_bShowBorder;
 	bool m_bShowCaption;
 	bool m_bActiveSplitter;
 	bool m_bShowMenuButton;
 	bool m_bHideEmptyButtonsBar;
 	bool m_bShowButtonText;
 	bool m_bShowButtonSeparator;
-
-public:
-	ULONG_PTR m_gdiPlusToken;
 
 public:
 	struct Item
@@ -202,7 +202,7 @@ OutlookTabCtrl::Private::Private(OutlookTabCtrl &owner) : o(owner)
 	m_clrImageStripeTransp = m_clrImageButtonTransp = CLR_NONE;
 	m_hCurDrag = NULL;
 		// 
-	m_bDrawBorder = true;
+	m_bShowBorder = true;
 	m_bShowCaption = true;
 	m_bActiveSplitter = true;
 	m_bShowMenuButton = true;
@@ -279,7 +279,7 @@ HANDLE OutlookTabCtrl::AddItem(HWND wnd, TCHAR const *text, int imageStripe, int
 HANDLE OutlookTabCtrl::InsertItem(HANDLE before, HWND wnd, TCHAR const *text, int imageStripe, int imageButton)
 {	assert( IsItemExist(before) );
 		// 
-	Private::i_item i_before = p.m_items.begin() + GetIndexByHandle(before);
+	Private::i_item i_before = p.m_items.begin() + GetItemIndexByHandle(before);
 	return p.InsertItem(i_before,wnd,text,imageStripe,imageButton);
 }
 // 
@@ -316,15 +316,15 @@ HANDLE OutlookTabCtrl::Private::InsertItem(i_item before, HWND wnd, TCHAR const 
 void OutlookTabCtrl::RemoveItem(HANDLE before, HANDLE src)
 {	assert(IsItemExist(before) && IsItemExist(src));
 		// 
-	p.m_items.erase( p.m_items.begin()+GetIndexByHandle(src) );
-	p.m_items.insert( p.m_items.begin()+GetIndexByHandle(before), p.HandleToItem(src));
+	p.m_items.erase( p.m_items.begin()+GetItemIndexByHandle(src) );
+	p.m_items.insert( p.m_items.begin()+GetItemIndexByHandle(before), p.HandleToItem(src));
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
 void OutlookTabCtrl::DeleteItem(HANDLE item)
 {	assert( IsItemExist(item) );
 	delete p.HandleToItem(item);
-	p.m_items.erase( p.m_items.begin()+GetIndexByHandle(item) );
+	p.m_items.erase( p.m_items.begin()+GetItemIndexByHandle(item) );
 	if(p.m_hCurItem==item)
 		p.m_hCurItem = GetTopVisibleAndEnableItem();
 	if(p.m_hTopVisibleStripe==item)
@@ -746,7 +746,7 @@ void OutlookTabCtrl::OnPaint()
 		// 
 	p.m_pDrawMngr->DrawBegin(this,&virtwnd);
 		// 
-	if(p.m_bDrawBorder)
+	if(p.m_bShowBorder)
 		if(GetBorderWidth() > 0)
 		{	CRect rc;
 			GetClientRect(&rc);
@@ -843,7 +843,7 @@ void OutlookTabCtrl::Private::Recalc()
 		// 
 	o.GetClientRect(&m_rcCaption);
 		// 
-	if(m_bDrawBorder)
+	if(m_bShowBorder)
 	{	const int width = o.GetBorderWidth();
 		if(width>0)
 			m_rcCaption.DeflateRect(width,width);
@@ -1100,7 +1100,7 @@ int OutlookTabCtrl::GetTotalNumberItems() const
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-HANDLE OutlookTabCtrl::GetItemByIndex(int idx) const
+HANDLE OutlookTabCtrl::GetItemHandleByIndex(int idx) const
 {	assert(idx>=0 && idx<GetTotalNumberItems());
 	return p.m_items[idx];
 }
@@ -1218,11 +1218,11 @@ void OutlookTabCtrl::Private::MoveChangedWindow(HWND wnd, CRect const *rcNew, bo
 /////////////////////////////////////////////////////////////////////////////
 // 
 void OutlookTabCtrl::ShowBorder(bool show)
-{	p.m_bDrawBorder = show;
+{	p.m_bShowBorder = show;
 }
 // 
 bool OutlookTabCtrl::IsBorderVisible() const
-{	return p.m_bDrawBorder;
+{	return p.m_bShowBorder;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -1312,7 +1312,7 @@ HANDLE OutlookTabCtrl::Private::HitTestEx(CPoint point) const
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-int OutlookTabCtrl::GetIndexByHandle(HANDLE item) const
+int OutlookTabCtrl::GetItemIndexByHandle(HANDLE item) const
 {	for(Private::ci_item i=p.m_items.begin(); i!=p.m_items.end(); ++i)
 		if(*i==p.HandleToItem(item)) 
 			return static_cast<int>(i-p.m_items.begin());
@@ -1320,7 +1320,7 @@ int OutlookTabCtrl::GetIndexByHandle(HANDLE item) const
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
-int OutlookTabCtrl::GetVisibleIndexByHandle(HANDLE item) const
+int OutlookTabCtrl::GetVisibleItemIndexByHandle(HANDLE item) const
 {	int idx=0;
 	for(Private::ci_item i=p.m_items.begin(); i!=p.m_items.end(); ++i)
 	{	if(!(*i)->visible)
@@ -1334,7 +1334,7 @@ int OutlookTabCtrl::GetVisibleIndexByHandle(HANDLE item) const
 /////////////////////////////////////////////////////////////////////////////
 // 
 bool OutlookTabCtrl::IsItemExist(HANDLE item) const
-{	return GetIndexByHandle(item)!=-1;
+{	return GetItemIndexByHandle(item)!=-1;
 }
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -1681,7 +1681,7 @@ bool OutlookTabCtrl::Private::LoadStateInner(CArchive *ar)
 // 
 bool OutlookTabCtrl::Private::SaveStateInner(CArchive *ar) const
 {	*ar << o.GetTotalNumberItems();   // total number (visible + invisible).
-	*ar << o.GetIndexByHandle(m_hCurItem);
+	*ar << o.GetItemIndexByHandle(m_hCurItem);
 		// 
 	for(ci_item i=m_items.begin(); i!=m_items.end(); ++i)
 	{	*ar << ::GetDlgCtrlID((*i)->wnd);
@@ -1866,8 +1866,8 @@ bool OutlookTabCtrlCustom1::HasButtonTooltip(OutlookTabCtrl const *ctrl, HANDLE 
 		// 
 	if( ctrl->IsButtonSeparatorVisible() )
 	{	const bool separator = (ctrl->GetButtonsAlign()==OutlookTabCtrl::ButtonsAlignRight ?
-			ctrl->GetTotalNumberVisibleItems()-ctrl->GetVisibleIndexByHandle(item) < ctrl->GetNumberVisibleButtons() : 
-			ctrl->GetVisibleIndexByHandle(item) != ctrl->GetTotalNumberVisibleItems()-1);
+			ctrl->GetTotalNumberVisibleItems()-ctrl->GetVisibleItemIndexByHandle(item) < ctrl->GetNumberVisibleButtons() : 
+			ctrl->GetVisibleItemIndexByHandle(item) != ctrl->GetTotalNumberVisibleItems()-1);
 		rc.DeflateRect(2+separator,0,2,0);
 	}
 		// 
@@ -2012,8 +2012,8 @@ void OutlookTabCtrlCustom1::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, HAND
 		// draw separator.
 	if( ctrl->IsButtonSeparatorVisible() )
 	{	const bool separator = (ctrl->GetButtonsAlign()==OutlookTabCtrl::ButtonsAlignRight ?
-			ctrl->GetTotalNumberVisibleItems()-ctrl->GetVisibleIndexByHandle(item) < ctrl->GetNumberVisibleButtons() : 
-			ctrl->GetVisibleIndexByHandle(item) != ctrl->GetTotalNumberVisibleItems()-1);
+			ctrl->GetTotalNumberVisibleItems()-ctrl->GetVisibleItemIndexByHandle(item) < ctrl->GetNumberVisibleButtons() : 
+			ctrl->GetVisibleItemIndexByHandle(item) != ctrl->GetTotalNumberVisibleItems()-1);
 			// 
 		if(separator)
 		{	CPen penSeparationLine(PS_SOLID,1, GetSeparationLineColor() );

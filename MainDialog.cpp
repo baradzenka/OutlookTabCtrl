@@ -94,7 +94,7 @@ int Dialog::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		!m_OutlookTabCtrl.AddItem(m_List8,_T("Shortcuts"),6,6) )
 		return -1;
 		// 
-	HANDLE itemContact = m_OutlookTabCtrl.GetItemByIndex(2);   // 'Contacts' item.
+	HANDLE itemContact = m_OutlookTabCtrl.GetItemHandleByIndex(2);   // 'Contacts' item.
 	m_OutlookTabCtrl.DisableItem(itemContact,true);   // just for demonstration the disable item.
 		// 
 	if( !m_OutlookTabCtrl.LoadState(AfxGetApp(),_T("OutlookTabCtrl"),_T("State")) )

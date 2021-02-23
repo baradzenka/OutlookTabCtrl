@@ -48,7 +48,7 @@ void ManageDialog::FillListCtrl()
 		// 
 	const int number = m_pTabCtrl->GetTotalNumberItems();
 	for(int i=0; i<number; ++i)
-	{	HANDLE h = m_pTabCtrl->GetItemByIndex(i);
+	{	HANDLE h = m_pTabCtrl->GetItemHandleByIndex(i);
 		int image;
 		(m_bTabImages ? m_pTabCtrl->GetItemImage(h,&image/*out*/,NULL) : m_pTabCtrl->GetItemImage(h,NULL,&image/*out*/));
 		const CString text = m_pTabCtrl->GetItemText(h);
@@ -58,7 +58,7 @@ void ManageDialog::FillListCtrl()
 		m_ListCtrl.SetCheck(i,visible);	
 	}
 	if(number)
-	{	const int idx = m_pTabCtrl->GetIndexByHandle( m_pTabCtrl->GetSelectedItem() );
+	{	const int idx = m_pTabCtrl->GetItemIndexByHandle( m_pTabCtrl->GetSelectedItem() );
 		m_ListCtrl.SetItemState(idx,LVIS_SELECTED,LVIS_SELECTED);
 	}
 }

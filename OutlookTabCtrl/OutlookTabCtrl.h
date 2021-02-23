@@ -171,9 +171,9 @@ public:
 	bool IsAnyStripeOrButtonPushed() const;
 		// 
 	HANDLE HitTest(CPoint point) const;   // get item in the given point.
-	HANDLE GetItemByIndex(int idx) const;   // top item has index 0 (from top to bottom).
-	int GetIndexByHandle(HANDLE item) const;
-	int GetVisibleIndexByHandle(HANDLE item) const;
+	HANDLE GetItemHandleByIndex(int idx) const;   // top item has index 0 (from top to bottom).
+	int GetItemIndexByHandle(HANDLE item) const;
+	int GetVisibleItemIndexByHandle(HANDLE item) const;
 	bool IsItemExist(HANDLE item) const;
 		// 
 	RECT GetItemRect(HANDLE item) const;   // stripe or button.
