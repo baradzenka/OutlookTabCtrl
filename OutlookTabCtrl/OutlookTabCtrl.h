@@ -13,6 +13,7 @@
 #include <vector>
 // 
 #if (!defined(_MSC_VER) && __cplusplus < 201103L) || (defined(_MSC_VER) && _MSC_VER < 1900)   // C++11 is not supported.
+	#define nullptr  NULL
 	#define override
 #endif
 /////////////////////////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ public:
 		virtual void OnMenuButtonClicked(OutlookTabCtrl * /*ctrl*/, CRect const * /*rect*/) {}
 	};
 	struct ToolTip
-	{	virtual CToolTipCtrl *CreateToolTip(OutlookTabCtrl * /*ctrl*/) { return NULL; }
+	{	virtual CToolTipCtrl *CreateToolTip(OutlookTabCtrl * /*ctrl*/) { return nullptr; }
 		virtual void DestroyToolTip(CToolTipCtrl * /*tooltip*/) {}
 		virtual bool HasButtonTooltip(OutlookTabCtrl const * /*ctrl*/, HANDLE /*item*/) { return true; }
 	};
@@ -82,7 +83,7 @@ public:
 	ToolTip *GetToolTipManager() const;
 	void SetDrawManager(Draw *p/*or null*/);
 	Draw *GetDrawManager() const;
-	void SetRecalcManager(IRecalc *p/*or null*/);   // NULL for default manager.
+	void SetRecalcManager(IRecalc *p/*or null*/);   // null for default manager.
 	IRecalc *GetRecalcManager() const;
 		// 
 	enum CaptionAlign
@@ -232,7 +233,7 @@ private:
 ///////////////////////////////////////
 protected:
 	DECLARE_MESSAGE_MAP()
-	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD style, const RECT &rect, CWnd *parentWnd, UINT id, CCreateContext *context = NULL) override;
+	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD style, const RECT &rect, CWnd *parentWnd, UINT id, CCreateContext *context = nullptr) override;
 	BOOL PreTranslateMessage(MSG *pMsg) override;
 	afx_msg void OnDestroy();
 	afx_msg void OnSize(UINT nType, int cx, int cy);

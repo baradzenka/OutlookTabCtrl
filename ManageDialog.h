@@ -21,8 +21,8 @@ private:
 
 protected:
 	DECLARE_MESSAGE_MAP()
-	virtual BOOL OnInitDialog();
-	virtual void OnOK();
+	BOOL OnInitDialog() override;
+	void OnOK() override;
 	afx_msg void OnBnClickedUp();
 	afx_msg void OnBnClickedDown();
 	afx_msg void OnBnClickedReset();

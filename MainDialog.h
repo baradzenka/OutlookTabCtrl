@@ -39,7 +39,7 @@ private:
 protected:
 	DECLARE_MESSAGE_MAP()
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	virtual BOOL OnInitDialog();
+	BOOL OnInitDialog() override;
 	afx_msg void OnDestroy();
 	afx_msg void OnSize(UINT nType,int cx,int cy);
 	afx_msg void OnContextMenuPop();

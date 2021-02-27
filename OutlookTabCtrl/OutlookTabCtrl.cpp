@@ -186,21 +186,21 @@ OutlookTabCtrl::~OutlookTabCtrl()
 /////////////////////////////////////////////////////////////////////////////
 // 
 OutlookTabCtrl::Private::Private(OutlookTabCtrl &owner) : o(owner)
-{	m_pAbilityMngr = NULL;
-	m_pNotifyMngr = NULL;
-	m_pToolTipMngr = NULL;
-	m_pDrawMngr = NULL;
+{	m_pAbilityMngr = nullptr;
+	m_pNotifyMngr = nullptr;
+	m_pToolTipMngr = nullptr;
+	m_pDrawMngr = nullptr;
 	m_pRecalcMngr = this;
 		// 
 	m_Layout = Layout1;
 	m_ButtonsAlign = ButtonsAlignRight;
 	m_CaptionAlign = CaptionAlignTop;
 		// 
-	m_pBitmapStripeNorm = m_pBitmapStripeDis = m_pBitmapButtonNorm = m_pBitmapButtonDis = NULL;
+	m_pBitmapStripeNorm = m_pBitmapStripeDis = m_pBitmapButtonNorm = m_pBitmapButtonDis = nullptr;
 	m_szImageStripe.cx = m_szImageButton.cx = 0;
 	m_szImageStripe.cy = m_szImageButton.cy = 0;
 	m_clrImageStripeTransp = m_clrImageButtonTransp = CLR_NONE;
-	m_hCurDrag = NULL;
+	m_hCurDrag = nullptr;
 		// 
 	m_bShowBorder = true;
 	m_bShowCaption = true;
@@ -212,18 +212,20 @@ OutlookTabCtrl::Private::Private(OutlookTabCtrl &owner) : o(owner)
 		// 
 	m_gdiPlusToken = 0;
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	Gdiplus::GdiplusStartup(&m_gdiPlusToken/*out*/,&gdiplusStartupInput,NULL);
+	Gdiplus::GdiplusStartup(&m_gdiPlusToken/*out*/,&gdiplusStartupInput,nullptr);
 }
 //
 OutlookTabCtrl::Private::~Private()
-{	::delete m_pBitmapStripeNorm;
+{	o.DestroyWindow();
+		// 
+	::delete m_pBitmapStripeNorm;
 	::delete m_pBitmapStripeDis;
 	::delete m_pBitmapButtonNorm;
 	::delete m_pBitmapButtonDis;
-	if(m_gdiPlusToken)
-		Gdiplus::GdiplusShutdown(m_gdiPlusToken);
 	if(m_hCurDrag) 
 		::DestroyCursor(m_hCurDrag);
+	if(m_gdiPlusToken)
+		Gdiplus::GdiplusShutdown(m_gdiPlusToken);
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -232,15 +234,15 @@ BOOL OutlookTabCtrl::Create(LPCTSTR /*lpszClassName*/, LPCTSTR /*lpszWindowName*
 }
 // 
 bool OutlookTabCtrl::Create(CWnd *parent, DWORD style, RECT const &rect, UINT id)
-{	p.m_hCurItem = NULL;
-	p.m_hHighlightedArea = NULL;
-	p.m_hPushedArea = NULL;
+{	p.m_hCurItem = nullptr;
+	p.m_hHighlightedArea = nullptr;
+	p.m_hPushedArea = nullptr;
 		// 
-	p.m_pToolTip = NULL;
-	p.m_hTopVisibleStripe = p.m_hBottomVisibleStripe = NULL;
+	p.m_pToolTip = nullptr;
+	p.m_hTopVisibleStripe = p.m_hBottomVisibleStripe = nullptr;
 	p.m_iTimerId = 0;
 		// 
-	const CString className = AfxRegisterWndClass(CS_DBLCLKS,::LoadCursor(NULL,IDC_ARROW),NULL,NULL);
+	const CString className = AfxRegisterWndClass(CS_DBLCLKS,::LoadCursor(nullptr,IDC_ARROW),nullptr,nullptr);
 	if( !CWnd::Create(className,_T(""),style | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,rect,parent,id) )
 		return false;
 		// 
@@ -287,12 +289,12 @@ HANDLE OutlookTabCtrl::Private::InsertItem(i_item before, HWND wnd, TCHAR const 
 {	assert(wnd && ::IsWindow(wnd) && ::GetParent(wnd)==o.m_hWnd);
 	assert(text);
 	assert(imageStripe>=-1 && imageButton>=-1);
-	assert(GetItemByWindowID(::GetDlgCtrlID(wnd))==NULL);   // window with this ID has been added.
+	assert(GetItemByWindowID(::GetDlgCtrlID(wnd))==nullptr);   // window with this ID has been added.
 	assert( ::GetDlgCtrlID(wnd) );   // ID==0 - this is error.
 		// 
 	Item *item = new (std::nothrow) Item;
 	if(!item)
-		return NULL;
+		return nullptr;
 		// 
 	item->wnd = wnd;
 	item->image.stripe = imageStripe;
@@ -328,9 +330,9 @@ void OutlookTabCtrl::DeleteItem(HANDLE item)
 	if(p.m_hCurItem==item)
 		p.m_hCurItem = GetTopVisibleAndEnableItem();
 	if(p.m_hTopVisibleStripe==item)
-		p.m_hTopVisibleStripe = NULL;
+		p.m_hTopVisibleStripe = nullptr;
 	if(p.m_hBottomVisibleStripe==item)
-		p.m_hBottomVisibleStripe = NULL;
+		p.m_hBottomVisibleStripe = nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -338,8 +340,8 @@ void OutlookTabCtrl::DeleteAllItems()
 {	for(Private::i_item i=p.m_items.begin(); i!=p.m_items.end(); ++i)
 		delete *i;
 	p.m_items.clear();
-	p.m_hCurItem = NULL;
-	p.m_hTopVisibleStripe = p.m_hBottomVisibleStripe = NULL;
+	p.m_hCurItem = nullptr;
+	p.m_hTopVisibleStripe = p.m_hBottomVisibleStripe = nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -418,11 +420,11 @@ bool OutlookTabCtrl::CreateStripeImage(HMODULE moduleRes/*or null*/, UINT resNor
 {
 	if(p.m_pBitmapStripeNorm)
 	{	::delete p.m_pBitmapStripeNorm;
-		p.m_pBitmapStripeNorm = NULL;
+		p.m_pBitmapStripeNorm = nullptr;
 	}
 	if(p.m_pBitmapStripeDis)
 	{	::delete p.m_pBitmapStripeDis;
-		p.m_pBitmapStripeDis = NULL;
+		p.m_pBitmapStripeDis = nullptr;
 	}
 		// 
 	bool res = true;
@@ -467,11 +469,11 @@ bool OutlookTabCtrl::CreateButtonImage(HMODULE moduleRes/*or null*/, UINT resNor
 {
 	if(p.m_pBitmapButtonNorm)
 	{	::delete p.m_pBitmapButtonNorm;
-		p.m_pBitmapButtonNorm = NULL;
+		p.m_pBitmapButtonNorm = nullptr;
 	}
 	if(p.m_pBitmapButtonDis)
 	{	::delete p.m_pBitmapButtonDis;
-		p.m_pBitmapButtonDis = NULL;
+		p.m_pBitmapButtonDis = nullptr;
 	}
 		// 
 	bool res = true;
@@ -562,7 +564,7 @@ void OutlookTabCtrl::SetItemWindow(HANDLE item, HWND wnd)
 {	assert( IsItemExist(item) );
 	assert(wnd && ::IsWindow(wnd) && ::GetParent(wnd)==m_hWnd);
 	assert(::GetDlgCtrlID(p.HandleToItem(item)->wnd)==::GetDlgCtrlID(wnd) ||   // window with the same id.
-		p.GetItemByWindowID(::GetDlgCtrlID(wnd))==NULL);   // window with this ID has been added.
+		p.GetItemByWindowID(::GetDlgCtrlID(wnd))==nullptr);   // window with this ID has been added.
 	p.HandleToItem(item)->wnd = wnd;
 }
 // 
@@ -651,11 +653,11 @@ bool OutlookTabCtrl::SetCursor(UINT drag)
 bool OutlookTabCtrl::SetCursor(HMODULE module, UINT drag)
 {	if(p.m_hCurDrag)
 	{	::DestroyCursor(p.m_hCurDrag);
-		p.m_hCurDrag = NULL;
+		p.m_hCurDrag = nullptr;
 	}
 		// 
 	if(module && drag)
-		if((p.m_hCurDrag = ::LoadCursor(module,MAKEINTRESOURCE(drag)))==NULL)
+		if((p.m_hCurDrag = ::LoadCursor(module,MAKEINTRESOURCE(drag)))==nullptr)
 			return false;
 		// 
 	return true;
@@ -693,7 +695,7 @@ int OutlookTabCtrl::Private::GetBorderWidth(OutlookTabCtrl const * /*ctrl*/, IRe
 }
 // 
 int OutlookTabCtrl::Private::GetCaptionHeight(OutlookTabCtrl const * /*ctrl*/, IRecalc * /*base*/)
-{	CWindowDC dc(NULL);
+{	CWindowDC dc(nullptr);
 	CFont *pOldFont = dc.SelectObject(&const_cast<CFont &>(m_FontCaption));
 	const int height = dc.GetTextExtent(_T("H"),1).cy;
 	dc.SelectObject(pOldFont);
@@ -705,7 +707,7 @@ int OutlookTabCtrl::Private::GetSplitterHeight(OutlookTabCtrl const * /*ctrl*/, 
 }
 // 
 int OutlookTabCtrl::Private::GetStripeHeight(OutlookTabCtrl const * /*ctrl*/, IRecalc * /*base*/)
-{	CWindowDC dc(NULL);
+{	CWindowDC dc(nullptr);
 	CFont *pOldFont = dc.SelectObject(&const_cast<CFont &>(m_FontStripes));
 	const int height = dc.GetTextExtent(_T("H"),1).cy;
 	dc.SelectObject(pOldFont);
@@ -714,7 +716,7 @@ int OutlookTabCtrl::Private::GetStripeHeight(OutlookTabCtrl const * /*ctrl*/, IR
 }
 // 
 int OutlookTabCtrl::Private::GetButtonHeight(OutlookTabCtrl const * /*ctrl*/, IRecalc * /*base*/)
-{	CWindowDC dc(NULL);
+{	CWindowDC dc(nullptr);
 	CFont *pOldFont = dc.SelectObject(&const_cast<CFont &>(m_FontButtons));
 	const int height = dc.GetTextExtent(_T("H"),1).cy;
 	dc.SelectObject(pOldFont);
@@ -796,7 +798,7 @@ void OutlookTabCtrl::OnPaint()
 			if((*i)->visible)
 				p.m_pDrawMngr->DrawButton(this,&virtwnd,*i);
 			// 
-		virtwnd.SelectClipRgn(NULL,RGN_COPY);
+		virtwnd.SelectClipRgn(nullptr,RGN_COPY);
 		virtwnd.SelectObject(oldFont);
 	}
 		// 
@@ -948,7 +950,7 @@ void OutlookTabCtrl::Private::Recalc()
 // Correct order items and assign top and bottom visible stripes.
 // 
 void OutlookTabCtrl::Private::PrepareRecalc()
-{	m_hTopVisibleStripe = m_hBottomVisibleStripe = NULL;
+{	m_hTopVisibleStripe = m_hBottomVisibleStripe = nullptr;
 		// 
 	for(i_item i=m_items.begin(); i!=m_items.end(); ++i)
 		if(!(*i)->visible)
@@ -995,7 +997,7 @@ bool OutlookTabCtrl::CanVisibleItemPush() const
 }
 // 
 void OutlookTabCtrl::PushVisibleItem()
-{	assert(p.m_hPushedArea==NULL);
+{	assert(p.m_hPushedArea==nullptr);
 		// 
 	for(Private::ri_item ri=p.m_items.rbegin(); ri!=p.m_items.rend(); ++ri)
 		if((*ri)->visible && !(*ri)->button)
@@ -1010,7 +1012,7 @@ bool OutlookTabCtrl::CanVisibleItemPop() const
 }
 // 
 void OutlookTabCtrl::PopVisibleItem()
-{	assert(p.m_hPushedArea==NULL);
+{	assert(p.m_hPushedArea==nullptr);
 		// 
 	for(Private::i_item i=p.m_items.begin(); i!=p.m_items.end(); ++i)
 		if((*i)->visible && (*i)->button)
@@ -1110,7 +1112,7 @@ HANDLE OutlookTabCtrl::GetTopVisibleItem() const
 {	for(Private::ci_item i=p.m_items.begin(); i!=p.m_items.end(); ++i)
 		if((*i)->visible)
 			return *i;
-	return NULL;
+	return nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -1118,7 +1120,7 @@ HANDLE OutlookTabCtrl::GetBottomVisibleItem() const
 {	for(Private::ri_item ri=p.m_items.rbegin(); ri!=p.m_items.rend(); ++ri)
 		if((*ri)->visible)
 			return *ri;
-	return NULL;
+	return nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -1126,13 +1128,13 @@ HANDLE OutlookTabCtrl::GetTopVisibleAndEnableItem() const
 {	for(Private::ci_item i=p.m_items.begin(); i!=p.m_items.end(); ++i)
 		if((*i)->visible && !(*i)->disabled)
 			return *i;
-	return NULL;
+	return nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
 void OutlookTabCtrl::SelectItem(HANDLE item)
-{	assert(p.m_hPushedArea==NULL);
+{	assert(p.m_hPushedArea==nullptr);
 	assert( IsItemExist(item) );
 		// 
 	if(p.m_hCurItem==item || !p.HandleToItem(item)->visible || p.HandleToItem(item)->disabled)
@@ -1192,7 +1194,7 @@ HANDLE OutlookTabCtrl::Private::GetItemByWindowID(int id) const
 {	for(ci_item i=m_items.begin(); i!=m_items.end(); ++i)
 		if(::GetDlgCtrlID((*i)->wnd)==id)
 			return *i;
-	return NULL;
+	return nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -1292,7 +1294,7 @@ HANDLE OutlookTabCtrl::HitTest(CPoint point) const
 		if((*i)->visible)
 			if( (*i)->rect.PtInRect(point) ) 
 				return *i;
-	return NULL;
+	return nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -1305,10 +1307,10 @@ HANDLE OutlookTabCtrl::Private::HitTestEx(CPoint point) const
 	HANDLE item = o.HitTest(point);
 	if(item)
 	{	if( o.IsItemDisabled(item) )
-			return NULL;
+			return nullptr;
 		return item;
 	}
-	return NULL;
+	return nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
@@ -1414,7 +1416,7 @@ void OutlookTabCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 			// 
 		if(hArea==p.m_hPushedArea)
 			changedSelect = (hArea!=Private::HANDLE_SPLITTER && (hArea==Private::HANDLE_MENUBUTTON || p.m_hCurItem!=hArea));   // select new item.
-		p.m_hPushedArea = NULL;
+		p.m_hPushedArea = nullptr;
 		ReleaseCapture();
 			// 
 		if(changedSelect)
@@ -1488,7 +1490,7 @@ void OutlookTabCtrl::OnMouseMove(UINT nFlags, CPoint point)
 	{	const HANDLE hHighlightedArea = p.HitTestEx(point);
 			// 
 		if(hHighlightedArea)
-		{	const bool changeHover = p.m_hHighlightedArea==NULL;
+		{	const bool changeHover = p.m_hHighlightedArea==nullptr;
 				// 
 			if(hHighlightedArea!=p.m_hHighlightedArea)
 			{	p.m_hHighlightedArea = hHighlightedArea;
@@ -1496,7 +1498,7 @@ void OutlookTabCtrl::OnMouseMove(UINT nFlags, CPoint point)
 			}
 				// 
 			if(changeHover)
-				p.m_iTimerId = SetTimer(1,10,NULL);
+				p.m_iTimerId = SetTimer(1,10,nullptr);
 		}
 	}
 		// 
@@ -1513,10 +1515,10 @@ void OutlookTabCtrl::OnTimer(UINT_PTR nIDEvent)
 		// 
 	HANDLE item = p.HitTestEx(pt);
 		// 
-	if(item==NULL || item==Private::HANDLE_SPLITTER)
+	if(item==nullptr || item==Private::HANDLE_SPLITTER)
 	{	KillTimer(p.m_iTimerId);
 		p.m_iTimerId = 0;
-		p.m_hHighlightedArea = NULL;
+		p.m_hHighlightedArea = nullptr;
 		Invalidate(FALSE);
 	}
 		// 
@@ -1531,8 +1533,8 @@ void OutlookTabCtrl::OnCaptureChanged(CWnd *pWnd)
 			p.m_iTimerId = 0;
 		}
 			// 
-		p.m_hHighlightedArea = NULL;
-		p.m_hPushedArea = NULL;
+		p.m_hHighlightedArea = nullptr;
+		p.m_hPushedArea = nullptr;
 		Invalidate(FALSE);
 	}
 		// 
@@ -1552,10 +1554,10 @@ LRESULT OutlookTabCtrl::OnNcHitTest(CPoint point)
 BOOL OutlookTabCtrl::OnSetCursor(CWnd *pWnd, UINT nHitTest, UINT message)
 {
 #ifdef _AFX_USING_CONTROL_BARS
-	if( CMFCPopupMenu::GetActiveMenu()==NULL )
+	if( CMFCPopupMenu::GetActiveMenu()==nullptr )
 #endif
 		if(p.m_bActiveSplitter && (nHitTest & 0x0000ffff)==Private::HTSplitter)
-		{	::SetCursor(p.m_hCurDrag ? p.m_hCurDrag : ::LoadCursor(NULL,IDC_SIZENS));
+		{	::SetCursor(p.m_hCurDrag ? p.m_hCurDrag : ::LoadCursor(nullptr,IDC_SIZENS));
 			return TRUE;
 		}
 	return CWnd::OnSetCursor(pWnd, nHitTest, message);
@@ -1594,7 +1596,7 @@ bool OutlookTabCtrl::LoadState(CWinApp *app, TCHAR const *section, TCHAR const *
 {	assert(app && section && entry);
 		//
 	bool res = false;
-	BYTE *pData = NULL;
+	BYTE *pData = nullptr;
 	UINT uDataSize;
 		// 
 	try
@@ -1671,7 +1673,7 @@ bool OutlookTabCtrl::Private::LoadStateInner(CArchive *ar)
 	}
 		// 
 	m_items = items;
-	m_hCurItem = (curItem>=0 ? m_items[curItem] : NULL);
+	m_hCurItem = (curItem>=0 ? m_items[curItem] : nullptr);
 		// 
 	Recalc();
 	o.Invalidate(FALSE);
@@ -1711,7 +1713,7 @@ bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID
 {	assert(resID);
 	assert(bmp);
 		// 
-	*bmp = NULL;
+	*bmp = nullptr;
 		// 
 	if(!moduleRes)
 		moduleRes = AfxFindResourceHandle(MAKEINTRESOURCE(resID),(pngImage ? _T("PNG") : RT_BITMAP));
@@ -1731,7 +1733,7 @@ bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID
 						{	void *lpResBuffer = ::GlobalLock(hRes);
 							if(lpResBuffer)
 							{	memcpy(lpResBuffer, lpBuffer, uiSize);
-								IStream *pStream = NULL;
+								IStream *pStream = nullptr;
 								if(::CreateStreamOnHGlobal(hRes, FALSE, &pStream/*out*/)==S_OK)
 								{	*bmp = ::new (std::nothrow) Gdiplus::Bitmap(pStream,FALSE);
 									pStream->Release();
@@ -1749,7 +1751,7 @@ bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID
 	{	::delete *bmp;
 		return false;
 	}
-	return (*bmp)!=NULL;
+	return (*bmp)!=nullptr;
 }
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1769,7 +1771,7 @@ bool OutlookTabCtrl::Private::CreateImageList(Gdiplus::Bitmap *bmp, int imageWid
 			{	Gdiplus::BitmapData data;
 				if(bmpCnvrt->LockBits(&rect,Gdiplus::ImageLockModeWrite,PixelFormat32bppARGB,&data)==Gdiplus::Ok)
 				{	CBitmap cbmp;
-					if( cbmp.CreateBitmap(rect.Width,rect.Height,1,32,NULL) )
+					if( cbmp.CreateBitmap(rect.Width,rect.Height,1,32,nullptr) )
 					{	const UINT maskRGB = (clrMask & 0x0000ff00) | (clrMask & 0xff)<<16 | (clrMask & 0x00ff0000)>>16;
 						const UINT number = data.Width * data.Height;
 						UINT32 *ptr = static_cast<UINT32 *>(data.Scan0);
@@ -1826,19 +1828,19 @@ void OutlookTabCtrlCustom1::Install(OutlookTabCtrl *ctrl)
 CToolTipCtrl *OutlookTabCtrlCustom1::CreateToolTip(OutlookTabCtrl *ctrl)
 {
 	#ifdef AFX_TOOLTIP_TYPE_ALL   // for MFC Feature Pack.
-		CToolTipCtrl *tooltip = NULL;
-		return (CTooltipManager::CreateToolTip(tooltip/*out*/,ctrl,AFX_TOOLTIP_TYPE_TAB) ? tooltip : NULL);
+		CToolTipCtrl *tooltip = nullptr;
+		return (CTooltipManager::CreateToolTip(tooltip/*out*/,ctrl,AFX_TOOLTIP_TYPE_TAB) ? tooltip : nullptr);
 	#else
-		CToolTipCtrl *toolTip = NULL;
+		CToolTipCtrl *toolTip = nullptr;
 		try
 		{	toolTip = new CToolTipCtrl;
 		}
 		catch(std::bad_alloc &)
-		{	return NULL;
+		{	return nullptr;
 		}
 		if( !toolTip->Create(ctrl,TTS_ALWAYSTIP) )
 		{	delete toolTip;
-			return NULL;
+			return nullptr;
 		}
 			// 
 		DWORD dwClassStyle = ::GetClassLong(toolTip->m_hWnd,GCL_STYLE);
@@ -1874,13 +1876,13 @@ bool OutlookTabCtrlCustom1::HasButtonTooltip(OutlookTabCtrl const *ctrl, HANDLE 
 	Gdiplus::Bitmap *pBmpNorm, *pBmpDis;
 	ctrl->GetButtonImage(&pBmpNorm/*out*/,&pBmpDis/*out*/);
 	int imageButton;
-	ctrl->GetItemImage(item,NULL,&imageButton/*out*/);
+	ctrl->GetItemImage(item,nullptr,&imageButton/*out*/);
 	const bool drawIcon = (imageButton!=-1 && 
 			((!ctrl->IsItemDisabled(item) && pBmpNorm) || 
 			(ctrl->IsItemDisabled(item) && pBmpDis)));
 	if(drawIcon)
 	{	CSize szImage;
-		ctrl->GetImageSize(NULL,&szImage);
+		ctrl->GetImageSize(nullptr,&szImage);
 		rc.left += GetButtonContentLeftMargin() + szImage.cx + GetButtonImageTextGap();
 	}
 	else
@@ -1980,7 +1982,7 @@ void OutlookTabCtrlCustom1::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, HAND
 	Gdiplus::Bitmap *pBmpNorm, *pBmpDis;
 	ctrl->GetStripeImage(&pBmpNorm/*out*/,&pBmpDis/*out*/);
 	int imageStripe;
-	ctrl->GetItemImage(item,&imageStripe/*out*/,NULL);
+	ctrl->GetItemImage(item,&imageStripe/*out*/,nullptr);
 	const bool bDisabled = ctrl->IsItemDisabled(item);
 		// 
 	rc.left += GetStripeContentLeftMargin();
@@ -1988,9 +1990,9 @@ void OutlookTabCtrlCustom1::DrawStripe(OutlookTabCtrl const *ctrl, CDC *dc, HAND
 		((!bDisabled && pBmpNorm) || (bDisabled && pBmpDis)))
 	{
 		CSize szImage;
-		ctrl->GetImageSize(&szImage/*out*/,NULL);
+		ctrl->GetImageSize(&szImage/*out*/,nullptr);
 		COLORREF clrTransp;
-		ctrl->GetImageTranspColor(&clrTransp/*out*/,NULL);
+		ctrl->GetImageTranspColor(&clrTransp/*out*/,nullptr);
 			// 		
 		Gdiplus::Bitmap *bmp = (!bDisabled ? pBmpNorm : pBmpDis);
 		const CPoint pt( rc.left, rc.top+(rc.Height()-szImage.cy)/2);
@@ -2032,7 +2034,7 @@ void OutlookTabCtrlCustom1::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, HAND
 	Gdiplus::Bitmap *pBmpNorm, *pBmpDis;
 	ctrl->GetButtonImage(&pBmpNorm/*out*/,&pBmpDis/*out*/);
 	int imageButton;
-	ctrl->GetItemImage(item,NULL,&imageButton/*out*/);
+	ctrl->GetItemImage(item,nullptr,&imageButton/*out*/);
 		// 
 	const bool bDisabled = ctrl->IsItemDisabled(item);
 	const bool drawIcon = (imageButton!=-1 && ((!bDisabled && pBmpNorm) || (bDisabled && pBmpDis)));
@@ -2042,9 +2044,9 @@ void OutlookTabCtrlCustom1::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, HAND
 		rc.left += GetButtonContentLeftMargin();
 		if(drawIcon)
 		{	CSize szImage;
-			ctrl->GetImageSize(NULL,&szImage/*out*/);
+			ctrl->GetImageSize(nullptr,&szImage/*out*/);
 			COLORREF clrTransp;
-			ctrl->GetImageTranspColor(NULL,&clrTransp/*out*/);
+			ctrl->GetImageTranspColor(nullptr,&clrTransp/*out*/);
 				// 
 			Gdiplus::Bitmap *bmp = (!bDisabled ? pBmpNorm : pBmpDis);
 			const CPoint pt( rc.left, (rc.top+rc.bottom-szImage.cy)/2 );
@@ -2061,9 +2063,9 @@ void OutlookTabCtrlCustom1::DrawButton(OutlookTabCtrl const *ctrl, CDC *dc, HAND
 	else	// draw icon only.
 		if(drawIcon)
 		{	CSize szImage;
-			ctrl->GetImageSize(NULL,&szImage/*out*/);
+			ctrl->GetImageSize(nullptr,&szImage/*out*/);
 			COLORREF clrTransp;
-			ctrl->GetImageTranspColor(NULL,&clrTransp/*out*/);
+			ctrl->GetImageTranspColor(nullptr,&clrTransp/*out*/);
 				// 
 			Gdiplus::Bitmap *bmp = (!bDisabled ? pBmpNorm : pBmpDis);
 			const CPoint pt( (rc.left+rc.right-szImage.cx)/2, (rc.top+rc.bottom-szImage.cy)/2 );
@@ -2152,7 +2154,7 @@ void OutlookTabCtrlCustom1::DrawBackground(OutlookTabCtrl const *ctrl, CDC *dc, 
 /////////////////////////////////////////////////////////////////////////////
 //
 CSize OutlookTabCtrlCustom1::GetTextSize(CFont *font, CString const &text) const
-{	CWindowDC dc(NULL);
+{	CWindowDC dc(nullptr);
 		// 
 	CFont *pOldFont = dc.SelectObject(font);
 	const CSize sz = dc.GetTextExtent(text);
@@ -2176,12 +2178,12 @@ void OutlookTabCtrlCustom1::DrawImage(CDC *dc, Gdiplus::Bitmap *bmp, CPoint cons
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-int OutlookTabCtrlCustom1::GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetBorderWidth(ctrl,NULL); }
-int OutlookTabCtrlCustom1::GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetCaptionHeight(ctrl,NULL); }
-int OutlookTabCtrlCustom1::GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetSplitterHeight(ctrl,NULL); }
-int OutlookTabCtrlCustom1::GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetStripeHeight(ctrl,NULL); }
-int OutlookTabCtrlCustom1::GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return std::max(3+m_iMenuImageHeight+3, base->GetButtonHeight(ctrl,NULL)); }
-int OutlookTabCtrlCustom1::GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetMinButtonWidth(ctrl,NULL); }
+int OutlookTabCtrlCustom1::GetBorderWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetBorderWidth(ctrl,nullptr); }
+int OutlookTabCtrlCustom1::GetCaptionHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetCaptionHeight(ctrl,nullptr); }
+int OutlookTabCtrlCustom1::GetSplitterHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetSplitterHeight(ctrl,nullptr); }
+int OutlookTabCtrlCustom1::GetStripeHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetStripeHeight(ctrl,nullptr); }
+int OutlookTabCtrlCustom1::GetButtonHeight(OutlookTabCtrl const *ctrl, IRecalc *base) { return std::max(3+m_iMenuImageHeight+3, base->GetButtonHeight(ctrl,nullptr)); }
+int OutlookTabCtrlCustom1::GetMinButtonWidth(OutlookTabCtrl const *ctrl, IRecalc *base) { return base->GetMinButtonWidth(ctrl,nullptr); }
 int OutlookTabCtrlCustom1::GetMenuButtonWidth(OutlookTabCtrl const * /*ctrl*/, IRecalc * /*base*/) { return 5 + m_iMenuImageWidth + 5; }
 // 
 /////////////////////////////////////////////////////////////////////////////
