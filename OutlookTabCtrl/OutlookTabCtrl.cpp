@@ -1341,28 +1341,28 @@ bool OutlookTabCtrl::IsItemExist(HANDLE item) const
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 // 
-RECT OutlookTabCtrl::GetItemRect(HANDLE item) const
+CRect OutlookTabCtrl::GetItemRect(HANDLE item) const
 {	assert( IsItemExist(item) );
 	return p.HandleToItem(item)->rect;
 }
 // 
-RECT OutlookTabCtrl::GetCaptionRect() const 
+CRect OutlookTabCtrl::GetCaptionRect() const 
 {	return p.m_rcCaption;
 }
 // 
-RECT OutlookTabCtrl::GetSplitterRect() const
+CRect OutlookTabCtrl::GetSplitterRect() const
 {	return p.m_rcSplitter;
 }
 // 
-RECT OutlookTabCtrl::GetStripesAreaRect() const
+CRect OutlookTabCtrl::GetStripesAreaRect() const
 {	return p.m_rcStripes;
 }
 // 
-RECT OutlookTabCtrl::GetButtonsAreaRect() const
+CRect OutlookTabCtrl::GetButtonsAreaRect() const
 {	return p.m_rcButtons;
 }
 // 
-RECT OutlookTabCtrl::GetMenuButtonRect() const
+CRect OutlookTabCtrl::GetMenuButtonRect() const
 {	return p.m_rcButtonMenu;
 }
 /////////////////////////////////////////////////////////////////////////////

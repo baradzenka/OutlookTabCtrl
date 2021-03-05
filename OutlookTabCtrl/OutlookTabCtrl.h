@@ -177,12 +177,12 @@ public:
 	int GetVisibleItemIndexByHandle(HANDLE item) const;
 	bool IsItemExist(HANDLE item) const;
 		// 
-	RECT GetItemRect(HANDLE item) const;   // stripe or button.
-	RECT GetCaptionRect() const;
-	RECT GetSplitterRect() const;
-	RECT GetStripesAreaRect() const;
-	RECT GetButtonsAreaRect() const;
-	RECT GetMenuButtonRect() const;
+	CRect GetItemRect(HANDLE item) const;   // stripe or button.
+	CRect GetCaptionRect() const;
+	CRect GetSplitterRect() const;
+	CRect GetStripesAreaRect() const;
+	CRect GetButtonsAreaRect() const;
+	CRect GetMenuButtonRect() const;
 		// 
 	bool CanVisibleItemPush() const;
 	void PushVisibleItem();   // from stripe to button state (for 1 item).
@@ -233,7 +233,7 @@ private:
 ///////////////////////////////////////
 protected:
 	DECLARE_MESSAGE_MAP()
-	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD style, const RECT &rect, CWnd *parentWnd, UINT id, CCreateContext *context = nullptr) override;
+	BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD style, const RECT &rect, CWnd *parentWnd, UINT id, CCreateContext *context) override;
 	BOOL PreTranslateMessage(MSG *pMsg) override;
 	afx_msg void OnDestroy();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
