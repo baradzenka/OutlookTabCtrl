@@ -20,7 +20,6 @@ private:   // OutlookTabCtrl::Notify.
 	void OnMenuButtonClicked(OutlookTabCtrl *ctrl, CRect const *rect) override;
 
 private:
-	CRect m_rcInit;
 	OutlookTabCtrl m_OutlookTabCtrl;
 	OutlookTabCtrlCustom1 m_Style1;
 	OutlookTabCtrlCustom2 m_Style2;

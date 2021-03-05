@@ -116,8 +116,6 @@ void Dialog::OnDestroy()
 BOOL Dialog::OnInitDialog()
 {	CDialog::OnInitDialog();
 		// 
-	GetDlgItem(IDC_OUTLOOKTABCTRL_BASE)->GetWindowRect(&m_rcInit/*out*/);
-	ScreenToClient(&m_rcInit);
 	SetOutlookTabCtrlPos();
 	GetDlgItem(IDC_OUTLOOKTABCTRL_BASE)->ShowWindow(SW_HIDE);
 		//
@@ -158,10 +156,18 @@ LOGFONT const *Dialog::GetTahomaBoldFont() const
 /////////////////////////////////////////////////////////////////////////////
 // 
 void Dialog::SetOutlookTabCtrlPos()
-{	CRect rc;
-	GetClientRect(&rc);
-	rc.DeflateRect(m_rcInit.left,m_rcInit.top,m_rcInit.top,m_rcInit.top);
-	m_OutlookTabCtrl.MoveWindow(&rc);
+{	CWnd *baseWnd = GetDlgItem(IDC_OUTLOOKTABCTRL_BASE);
+		// 
+	if(baseWnd)
+	{	CRect rcBase;
+		baseWnd->GetWindowRect(&rcBase/*out*/);
+		ScreenToClient(&rcBase);
+			// 
+		CRect rc;
+		GetClientRect(&rc/*out*/);
+		rc.DeflateRect(rcBase.left,rcBase.top,rcBase.top,rcBase.top);
+		m_OutlookTabCtrl.MoveWindow(&rc);
+	}
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
