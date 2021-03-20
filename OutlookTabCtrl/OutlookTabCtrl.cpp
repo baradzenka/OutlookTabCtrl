@@ -266,11 +266,19 @@ void OutlookTabCtrl::OnDestroy()
 	CWnd::OnDestroy();
 }
 /////////////////////////////////////////////////////////////////////////////
+// Don't use CWnd::PreTranslateMessage to call CToolTipCtrl::RelayEvent.
+//  If TabCtrl is in a Regular MFC DLL, then CWnd::PreTranslateMessage is not called. 
 // 
-BOOL OutlookTabCtrl::PreTranslateMessage(MSG *pMsg)
+LRESULT OutlookTabCtrl::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {	if(p.m_pToolTip && p.m_pToolTip->m_hWnd)
-		p.m_pToolTip->RelayEvent(pMsg);
-	return CWnd::PreTranslateMessage(pMsg);
+		if(message==WM_LBUTTONDOWN || message==WM_LBUTTONUP || message==WM_MBUTTONDOWN || message==WM_MBUTTONUP ||   // All messages required for TTM_RELAYEVENT.
+			message==WM_MOUSEMOVE || message==WM_NCMOUSEMOVE || message==WM_RBUTTONDOWN || message==WM_RBUTTONUP)
+		{
+			// Don't use AfxGetCurrentMessage(). If TabCtrl is in a Regular MFC DLL, then we get an empty MSG. 
+			MSG msg = {m_hWnd,message,wParam,lParam,0,{0,0}};
+			p.m_pToolTip->RelayEvent(&msg);
+		}
+	return CWnd::WindowProc(message,wParam,lParam);
 }
 /////////////////////////////////////////////////////////////////////////////
 // 
