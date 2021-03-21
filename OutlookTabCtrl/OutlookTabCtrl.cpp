@@ -1746,7 +1746,9 @@ bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID
 								{	*bmp = ::new (std::nothrow) Gdiplus::Bitmap(pStream,FALSE);
 									pStream->Release();
 								}
+								::GlobalUnlock(lpResBuffer);
 							}
+							::GlobalFree(hRes);
 						}
 						::UnlockResource(hGlobal);
 					}
