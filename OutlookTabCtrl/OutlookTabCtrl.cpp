@@ -1759,6 +1759,7 @@ bool OutlookTabCtrl::Private::LoadImage(HMODULE moduleRes/*or null*/, UINT resID
 	}
 	if(*bmp && (*bmp)->GetLastStatus()!=Gdiplus::Ok)
 	{	::delete *bmp;
+		*bmp = nullptr;
 		return false;
 	}
 	return (*bmp)!=nullptr;
