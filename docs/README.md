@@ -56,5 +56,3 @@ There are also three additional classes: `Ability`, `Notify`, and `ToolTip`. The
 Windows for all new added items should have the unique identifiers. Items can be in the state of a stripe or button. By default, an item is added as a stripe. The user should call the `Update` function to show the results that are set by functions `DeleteItem`, `SetItemWindow`, `SelectItem`, etc. You can hide an item (`ShowItem`) or block it (`DisableItem`). It is also possible to get the index of an item among all visible items (`GetVisibleIndexByHandle`) or in general among all items in the control (`GetIndexByHandle`). A control can save and load the position of its elements and their visibility from the registry or another source (`LoadState`/`SaveState`). This is only part of the possibilities. To learn more, take a look at the public interface of the `OutlookTabCtrl` class.
 
 Good luck! :-)
-
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?business=HTC7VHPDL6U54&item_name=Thank+you+for+your+donation.+This+will+help+me+develop+great+things+further.&currency_code=USD)
